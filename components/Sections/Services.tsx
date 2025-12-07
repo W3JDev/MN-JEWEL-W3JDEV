@@ -1,9 +1,43 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SERVICES } from '../../constants';
 import GlassCard from '../UI/GlassCard';
 import Button from '../UI/Button';
 
+declare const gsap: any;
+declare const ScrollTrigger: any;
+
 const Services: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+      
+      const cards = sectionRef.current?.querySelectorAll('.service-card');
+      
+      if (cards && cards.length > 0) {
+        gsap.fromTo(cards, 
+          { 
+            y: 50, 
+            opacity: 0 
+          }, 
+          {
+            y: 0, 
+            opacity: 1, 
+            duration: 0.8, 
+            stagger: 0.2, 
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 75%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      }
+    }
+  }, []);
+
   const getBorderColor = (color: string) => {
      const map: Record<string, string> = {
       cyan: 'hover:border-[#00f3ff]',
@@ -23,7 +57,7 @@ const Services: React.FC = () => {
   };
 
   return (
-    <section id="services" className="py-24 relative overflow-hidden">
+    <section id="services" ref={sectionRef} className="py-24 relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 relative z-10">
             <div className="text-center mb-16">
                 <h2 className="font-display text-4xl font-bold mb-4">Engagement Models</h2>
@@ -36,7 +70,7 @@ const Services: React.FC = () => {
                 {SERVICES.map((service) => (
                     <GlassCard 
                         key={service.title} 
-                        className={`p-8 rounded-2xl flex flex-col relative group border-t-4 border-t-transparent ${getBorderColor(service.color)}`}
+                        className={`service-card opacity-0 p-8 rounded-2xl flex flex-col relative group border-t-4 border-t-transparent ${getBorderColor(service.color)}`}
                     >
                          <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 text-2xl ${getIconColor(service.color)}`}>
                             <span className="material-symbols-outlined">{service.icon}</span>
