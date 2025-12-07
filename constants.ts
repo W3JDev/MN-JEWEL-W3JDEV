@@ -20,7 +20,6 @@ export const STORY_CHAPTERS: StoryChapter[] = [
     subtitle: 'THE FOUNDATION',
     title: 'Operational DNA',
     description: "My journey began with 10,000+ hours on the floor of Kuala Lumpur's finest F&B establishments. I learned that in high-pressure environments, a system that isn't intuitive is a system that fails. Efficiency isn't a metric; it's survival.",
-    // Chef / Kitchen image
     image: 'https://images.unsplash.com/photo-1556910103-1c02745a30bf?auto=format&fit=crop&q=80&w=1600',
     color: 'cyan',
     rotation: '-2deg'
@@ -30,7 +29,6 @@ export const STORY_CHAPTERS: StoryChapter[] = [
     subtitle: 'THE PIVOT',
     title: 'The Crisis',
     description: "Faced with critical operational bottlenecks, I didn't hire a consultant—I became the engineer. I taught myself Python and AI to solve specific, ground-level business challenges, transforming champagne problems into prosecco-budget fixes.",
-    // Coding / Laptop image
     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1600',
     color: 'orange',
     rotation: '2deg'
@@ -40,7 +38,6 @@ export const STORY_CHAPTERS: StoryChapter[] = [
     subtitle: 'CURRENT STATE',
     title: 'Enterprise Architect',
     description: "Now at Neurones IT Asia, I bridge the gap between culinary craft and cutting-edge tech. I build full-stack AI solutions that respect the human element while relentlessly automating the robotic one.",
-    // Server / Enterprise Tech image
     image: 'https://images.unsplash.com/photo-1558494949-ef526b0042a0?auto=format&fit=crop&q=80&w=1600',
     color: 'purple',
     rotation: '-1deg'
@@ -116,7 +113,7 @@ export const EXPERTISE_SKILLS: Skill[] = [
 ];
 
 export const TECH_STACK = [
-  'Python', 'CrewAI', 'Gemini', 'LangChain', 'TypeScript', 'React / Next.js', 'n8n', 'Supabase', 'Docker', 'GCP', 'OpenAI', 'PostgreSQL'
+  'Python', 'CrewAI', 'Gemini', 'LangChain', 'TypeScript', 'React', 'Next.js', 'n8n', 'Supabase', 'Docker', 'GCP', 'OpenAI', 'PostgreSQL', 'Tailwind', 'Three.js'
 ];
 
 export const PROJECTS: Project[] = [
@@ -130,6 +127,7 @@ export const PROJECTS: Project[] = [
     tags: ['Node.js', 'Google Workspace', 'Automation'],
     image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
+    repoLink: '#'
   },
   {
     id: 'flair-ai',
@@ -141,6 +139,7 @@ export const PROJECTS: Project[] = [
     tags: ['WebSockets', 'Gemini', 'ElevenLabs'],
     image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
+    repoLink: '#'
   },
   {
     id: 'vine-ai',
@@ -152,6 +151,7 @@ export const PROJECTS: Project[] = [
     tags: ['Python', 'NLP', 'Vector DB'],
     image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
+    repoLink: '#'
   },
   {
     id: 'artisan-ai',
@@ -163,6 +163,7 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'SaaS', 'Firebase'],
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
+    repoLink: '#'
   },
   {
     id: 'waiter-ai',
@@ -174,6 +175,7 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'UX Design', 'Analytics'],
     image: 'https://images.unsplash.com/photo-1550966871-3ed3c47e2ce2?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
+    repoLink: '#'
   },
   {
     id: 'shop-ai',
@@ -185,6 +187,7 @@ export const PROJECTS: Project[] = [
     tags: ['E-commerce', 'AI Chatbot', 'Funnel Opt.'],
     image: 'https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
+    repoLink: '#'
   }
 ];
 

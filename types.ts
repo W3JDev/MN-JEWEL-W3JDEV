@@ -9,6 +9,7 @@ export interface Project {
   image: string;
   liveLink?: string;
   caseStudyLink?: string;
+  repoLink?: string;
 }
 
 export interface StoryChapter {

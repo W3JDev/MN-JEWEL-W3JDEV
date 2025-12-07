@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
       <a 
         href="#contact"
         onClick={(e) => scrollToSection(e, '#contact')}
-        className="relative z-10 px-5 py-2 bg-white/5 hover:bg-white/10 rounded-full text-[10px] font-bold transition-all border border-white/10 tracking-widest shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+        className="relative z-10 px-6 py-2 bg-[#FF3D00] hover:bg-[#ff5e2e] text-black rounded-full text-[10px] font-bold transition-all border border-transparent tracking-widest shadow-[0_0_15px_rgba(255,61,0,0.4)] hover:shadow-[0_0_25px_rgba(255,61,0,0.6)] animate-pulse hover:animate-none"
       >
         HIRE ME
       </a>

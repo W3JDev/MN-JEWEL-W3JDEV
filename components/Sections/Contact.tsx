@@ -76,28 +76,32 @@ const Contact: React.FC = () => {
             I build systems that sleep so you don't have to. Whether it's architecting an AI agent swarm or auditing your F&B operations, let's engineer the solution.
           </p>
           
-          <div className="flex flex-col gap-4 mb-10">
+          <div className="flex flex-wrap gap-4 mb-10">
              <Button variant="secondary" icon="download" className="w-fit">
-                Download Resume (PDF)
+                Download Resume
              </Button>
-             <Button variant="primary" icon="bolt" className="w-fit">
-                Book 15-Min Automation Audit
-             </Button>
+             <a href="https://linkedin.com/in/w3jdev" target="_blank" rel="noopener noreferrer">
+                 <Button variant="glass" icon="link" className="w-fit">
+                    Connect on LinkedIn
+                 </Button>
+             </a>
           </div>
           
           <div className="flex flex-col gap-6 mb-8">
-            <div className="flex items-center gap-4 text-gray-300">
+            <div className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors cursor-pointer">
               <span className="material-symbols-outlined text-[#00f3ff]">mail</span>
-              <a href="mailto:contact@w3jdev.com" className="hover:text-white transition-colors">mnjewelps@gmail.com</a>
+              <a href="mailto:contact@w3jdev.com" className="font-mono text-sm">mnjewelps@gmail.com</a>
             </div>
-            <div className="flex items-center gap-4 text-gray-300">
-              <span className="material-symbols-outlined text-[#FF3D00]">location_on</span>
-              <span>Kuala Lumpur / Remote</span>
-            </div>
-             <div className="flex gap-4 text-gray-400 mt-2">
-                <a href="https://linkedin.com/in/w3jdev" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
-                <span>/</span>
-                <a href="https://github.com/W3JDev" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
+            
+            <div className="h-[1px] w-full bg-white/10"></div>
+
+             <div className="flex gap-6 text-gray-500 mt-2">
+                <a href="https://github.com/W3JDev" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">code</span> GitHub
+                </a>
+                <a href="#" className="hover:text-white transition-colors flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">calendar_month</span> Book a Call
+                </a>
              </div>
           </div>
         </div>

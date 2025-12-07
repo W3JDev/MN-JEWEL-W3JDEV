@@ -76,8 +76,7 @@ const Projects: React.FC<ProjectsProps> = ({ onOpenModal }) => {
           {PROJECTS.map((project, index) => (
             <div 
                 key={project.id} 
-                className={`group relative ${getGridClass(index)} cursor-pointer p-[1px] rounded-[1.6rem] overflow-hidden`} 
-                onClick={() => onOpenModal(project.title)}
+                className={`group relative ${getGridClass(index)} cursor-default p-[1px] rounded-[1.6rem] overflow-hidden`} 
                 data-hover="true"
             >
               {/* Iridescent Gemstone Border Background */}
@@ -93,20 +92,27 @@ const Projects: React.FC<ProjectsProps> = ({ onOpenModal }) => {
                     <img 
                         src={project.image} 
                         alt={project.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-40"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-30 filter grayscale group-hover:grayscale-0"
                     />
-                    {/* UPDATED: Reduced opacity from via-black/80 to via-black/50 and base opacity 0.9 to 0.6 to show images better */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 transition-opacity"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-90 transition-opacity"></div>
                 </div>
 
                 {/* Content Overlay */}
                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                    {/* Top Right Tag */}
-                    <div className="absolute top-6 right-6 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                        <span className="text-xs font-mono font-bold text-white">VIEW CASE STUDY</span>
+                    
+                    {/* Action Buttons (Hover Only) */}
+                    <div className="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-20">
+                         <button onClick={() => onOpenModal(project.title)} className="bg-white text-black px-4 py-2 rounded-full font-bold text-xs hover:bg-gray-200 transition-colors">
+                            LIVE DEMO
+                         </button>
+                         {project.repoLink && (
+                             <a href={project.repoLink} target="_blank" rel="noopener noreferrer" className="bg-black/50 border border-white/20 text-white px-3 py-2 rounded-full hover:bg-white/10 transition-colors">
+                                <span className="material-symbols-outlined text-sm">code</span>
+                             </a>
+                         )}
                     </div>
 
-                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 relative z-10">
                         <div className="flex items-center gap-3 mb-3">
                             <span className={`w-2 h-2 rounded-full bg-${project.metricColor === 'cyan' ? '[#00f3ff]' : project.metricColor === 'orange' ? '[#FF3D00]' : project.metricColor === 'green' ? 'green-400' : '[#7e22ce]'} shadow-[0_0_10px_currentColor]`}></span>
                             <span className="font-mono text-xs text-gray-400 uppercase tracking-widest">{project.metricLabel}</span>
@@ -115,11 +121,11 @@ const Projects: React.FC<ProjectsProps> = ({ onOpenModal }) => {
                         <h3 className="font-display text-3xl font-bold text-white mb-2 drop-shadow-lg">{project.title}</h3>
                         
                         {/* Metric Big Display */}
-                        <div className={`text-4xl font-bold font-mono mb-2 text-transparent bg-clip-text bg-gradient-to-r ${getGemstoneGradient(project.metricColor)} opacity-0 group-hover:opacity-100 transition-all duration-500 absolute top-[-3rem] left-0 drop-shadow-lg`}>
+                        <div className={`text-5xl font-bold font-mono mb-4 text-transparent bg-clip-text bg-gradient-to-r ${getGemstoneGradient(project.metricColor)} opacity-100 transition-all duration-500 drop-shadow-lg`}>
                             {project.metric}
                         </div>
 
-                        <p className="text-gray-300 text-sm line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-black drop-shadow-md">
+                        <p className="text-gray-300 text-sm line-clamp-3 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 shadow-black drop-shadow-md">
                             {project.description}
                         </p>
 

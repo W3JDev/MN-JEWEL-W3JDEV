@@ -99,13 +99,13 @@ const Expertise: React.FC = () => {
         </div>
 
         {/* --- TECH STACK TICKER --- */}
-        <div className="w-full overflow-hidden border-t border-b border-white/5 py-6 bg-black/20 backdrop-blur-md">
+        <div className="w-full overflow-hidden border-t border-b border-white/5 py-8 bg-black/20 backdrop-blur-md">
              <div className="flex animate-[ticker_20s_linear_infinite] w-max hover:pause">
                 {[...TECH_STACK, ...TECH_STACK].map((tech, i) => (
-                    <span key={i} className="mx-6 font-mono text-sm text-gray-500 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-[#00f3ff] rounded-full opacity-50 shadow-[0_0_5px_#00f3ff]"></span>
-                        {tech}
-                    </span>
+                    <div key={i} className="mx-4 px-4 py-2 rounded-lg border border-white/10 bg-white/5 flex items-center gap-3 backdrop-blur-sm hover:border-[#00f3ff]/50 hover:bg-[#00f3ff]/10 transition-colors">
+                        <span className="w-2 h-2 bg-[#00f3ff] rounded-full shadow-[0_0_8px_#00f3ff]"></span>
+                        <span className="font-mono text-sm font-bold text-gray-300">{tech}</span>
+                    </div>
                 ))}
              </div>
         </div>

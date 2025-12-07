@@ -81,15 +81,15 @@ const Hero: React.FC = () => {
 
           <div ref={heroRef} className="text-center relative z-10">
              <div ref={contentRef}>
-                {/* Trust Signal Badge */}
-                <div className="badge-container hero-anim opacity-0 inline-flex items-center gap-3 mb-8 px-4 py-2 bg-black/40 rounded-full border border-white/10 backdrop-blur-md">
-                <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                <span className="font-mono text-[10px] md:text-xs tracking-widest text-gray-300 uppercase">
-                    Enterprise AI @ <span className="text-white font-bold">Neurones IT Asia</span>
-                </span>
+                {/* Status Badge */}
+                <div className="badge-container hero-anim opacity-0 inline-flex items-center gap-3 mb-8 px-4 py-2 bg-black/60 rounded-full border border-green-500/30 backdrop-blur-md shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                  <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                  </span>
+                  <span className="font-mono text-[10px] md:text-xs tracking-widest text-gray-300 uppercase">
+                      OPEN TO WORK <span className="mx-2 text-gray-600">|</span> <span className="text-white font-bold">ENTERPRISE AI ARCHITECT</span>
+                  </span>
                 </div>
                 
                 <h1 className="hero-anim opacity-0 font-display text-5xl md:text-8xl font-bold leading-[0.9] mb-8 tracking-tighter will-change-transform drop-shadow-2xl">
@@ -108,16 +108,22 @@ const Hero: React.FC = () => {
             {/* Gradient Line */}
             <div className="hero-anim opacity-0 w-32 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent mx-auto mb-10"></div>
 
-            <p className="hero-anim opacity-0 font-mono text-gray-400 max-w-xl mx-auto mb-12 text-xs md:text-sm tracking-widest uppercase leading-relaxed">
-              Transforming <span className="text-white">champagne problems</span> into <span className="text-white">prosecco-budget fixes</span> via Agentic AI & Automation.
-            </p>
+            {/* Executive Summary TL;DR */}
+            <div className="hero-anim opacity-0 font-mono text-gray-400 max-w-2xl mx-auto mb-12 text-xs md:text-sm tracking-wide leading-relaxed bg-black/40 border border-white/5 p-6 rounded-xl backdrop-blur-md">
+               <p className="mb-2"><span className="text-[#00f3ff] font-bold">/// SYSTEM STATUS:</span></p>
+               <p>
+                 I transform <span className="text-white">champagne problems</span> into <span className="text-white">prosecco-budget fixes</span>. 
+                 Specializing in <span className="text-[#FF3D00]">F&B Ops</span>, <span className="text-[#00f3ff]">Agentic AI</span>, and <span className="text-[#7e22ce]">Automation</span>.
+                 Looking for high-impact roles in Digital Transformation.
+               </p>
+            </div>
             
             <div className="hero-anim opacity-0 flex flex-col md:flex-row gap-5 justify-center">
-              <Button onClick={() => scrollTo('projects')}>
-                Explore Tangible Impact
+              <Button onClick={() => scrollTo('projects')} icon="bolt">
+                View ROI Impact
               </Button>
-              <Button variant="glass" onClick={() => scrollTo('story')} icon="history_edu">
-                The Operational DNA
+              <Button variant="glass" onClick={() => scrollTo('contact')} icon="mail">
+                Book Consultation
               </Button>
             </div>
           </div>
