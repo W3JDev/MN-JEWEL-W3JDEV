@@ -113,7 +113,16 @@ export const EXPERTISE_SKILLS: Skill[] = [
 ];
 
 export const TECH_STACK = [
-  'Python', 'CrewAI', 'Gemini', 'LangChain', 'TypeScript', 'React', 'Next.js', 'n8n', 'Supabase', 'Docker', 'GCP', 'OpenAI', 'PostgreSQL', 'Tailwind', 'Three.js'
+  { name: 'Python', color: '#3776AB', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg' },
+  { name: 'TypeScript', color: '#3178C6', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg' },
+  { name: 'React', color: '#61DAFB', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' },
+  { name: 'Next.js', color: '#FFFFFF', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg' },
+  { name: 'Node.js', color: '#339933', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg' },
+  { name: 'PostgreSQL', color: '#4169E1', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg' },
+  { name: 'Docker', color: '#2496ED', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg' },
+  { name: 'Google Cloud', color: '#4285F4', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg' },
+  { name: 'Firebase', color: '#FFCA28', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg' },
+  { name: 'Tailwind', color: '#06B6D4', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' },
 ];
 
 export const PROJECTS: Project[] = [
@@ -139,6 +148,13 @@ export const PROJECTS: Project[] = [
     tags: ['WebSockets', 'Gemini', 'ElevenLabs'],
     image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
+    caseStudyLink: '#',
+    caseStudyContent: {
+        challenge: "High staff turnover in the hospitality sector creates a perpetual training bottleneck. Managers spend 40% of their time retraining new hires on basic SOPs, menu knowledge, and conflict resolution, leading to burnout and inconsistent service quality.",
+        solution: "Developed FlairAI, a voice-activated training simulator. It uses Gemini 1.5 Pro to generate dynamic customer scenarios (e.g., 'Angry Guest', 'Allergy Query') and ElevenLabs for realistic voice responses. New hires practice verbal interactions in real-time.",
+        results: ["Reduced management training hours by 40%", "Increased scenario coverage by 605% (from 20 static scripts to infinite variations)", "Improved staff confidence scores by 85% in first week"],
+        techDeepDive: "Built on Next.js with a Python (FastAPI) backend. Utilizes WebSockets for sub-500ms latency voice streaming. Vector database stores SOPs for RAG-based accuracy checks on trainee responses."
+    },
     repoLink: '#'
   },
   {
@@ -151,7 +167,14 @@ export const PROJECTS: Project[] = [
     tags: ['Python', 'NLP', 'Vector DB'],
     image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1200',
     liveLink: '#',
-    repoLink: '#'
+    caseStudyContent: {
+      challenge: "Waitstaff often lack the deep oenological knowledge required to sell premium wines confidently, resulting in missed revenue opportunities and reliance on a single sommelier.",
+      solution: "Engineered a Vector Search recommendation engine. Staff input guest preferences ('dry white, under $100, goes with sea bass'). The system retrieves the perfect bottle from the inventory with tasting notes and upsell scripts.",
+      results: ["300% ROI within 3 months via increased premium sales", "35% increase in Average Order Value (AOV) for wine", "Zero dependency on head sommelier for floor recommendations"],
+      techDeepDive: "Pinecone Vector DB for semantic search of wine notes. Python implementation using LangChain for query parsing."
+    },
+    repoLink: '#',
+    caseStudyLink: '#'
   },
   {
     id: 'artisan-ai',
@@ -234,6 +257,15 @@ export const TESTIMONIALS = [
     role: "Human Impact",
     quote: "Reduced new-hire training time by 40% while expanding training scenario coverage by 605%, ensuring consistent service standards.",
   }
+];
+
+export const CLIENTS = [
+  { name: 'Neurones IT', logo: 'https://placehold.co/180x60/050505/666666/png?text=NEURONES+IT' },
+  { name: 'Nexus F&B', logo: 'https://placehold.co/180x60/050505/666666/png?text=NEXUS+GROUP' },
+  { name: 'Astra Tech', logo: 'https://placehold.co/180x60/050505/666666/png?text=ASTRA+TECH' },
+  { name: 'Cyberia', logo: 'https://placehold.co/180x60/050505/666666/png?text=CYBERIA' },
+  { name: 'Vortex Ops', logo: 'https://placehold.co/180x60/050505/666666/png?text=VORTEX+OPS' },
+  { name: 'Synapse AI', logo: 'https://placehold.co/180x60/050505/666666/png?text=SYNAPSE+AI' }
 ];
 
 export const FAQS = [

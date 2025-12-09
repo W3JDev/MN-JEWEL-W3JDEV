@@ -1,19 +1,50 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { TESTIMONIALS } from '../../constants';
 import GlassCard from '../UI/GlassCard';
+import SectionTitle from '../UI/SectionTitle';
+
+declare const gsap: any;
+declare const ScrollTrigger: any;
 
 const Testimonials: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+
+      const cards = containerRef.current?.querySelectorAll('.testimonial-card');
+      if (cards) {
+        gsap.fromTo(cards, 
+          { y: 50, opacity: 0 },
+          { 
+            y: 0, 
+            opacity: 1, 
+            duration: 0.8, 
+            stagger: 0.2, 
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top 80%",
+            }
+          }
+        );
+      }
+    }
+  }, []);
+
   return (
-    <section className="py-20 relative overflow-hidden border-y border-white/5 bg-black/50">
+    <section ref={containerRef} className="py-32 relative overflow-hidden border-t border-white/5 bg-black/50">
         <div className="max-w-7xl mx-auto px-6">
-             <div className="flex items-center gap-4 mb-12 opacity-70">
-                <span className="w-12 h-[1px] bg-gray-500"></span>
-                <span className="font-mono text-xs tracking-widest text-gray-400">MISSION REPORTS</span>
-             </div>
+             <SectionTitle 
+                eyebrow="MISSION REPORTS"
+                title="Field Intelligence"
+                description="Operational outcomes and impact reports from deployed systems."
+             />
              
              <div className="grid md:grid-cols-3 gap-8">
                  {TESTIMONIALS.map((t, i) => (
-                     <div key={i} className="relative">
+                     <div key={i} className="testimonial-card opacity-0 relative">
                          <span className="absolute -top-4 -left-2 text-6xl text-white/5 font-serif">"</span>
                          <GlassCard className="p-8 rounded-xl bg-[#0a0a0a]" hoverEffect={false}>
                              <p className="text-gray-300 mb-6 leading-relaxed italic relative z-10">

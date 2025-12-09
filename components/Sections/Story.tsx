@@ -1,135 +1,172 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { STORY_CHAPTERS } from '../../constants';
 import GlassCard from '../UI/GlassCard';
+import SectionTitle from '../UI/SectionTitle';
 
 declare const gsap: any;
 declare const ScrollTrigger: any;
 
 const Story: React.FC = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [activeChapter, setActiveChapter] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+
+  const getGlowColor = (color: string) => {
+    switch (color) {
+      case 'cyan': return '#00f3ff';
+      case 'orange': return '#FF3D00';
+      case 'purple': return '#7e22ce';
+      default: return '#ffffff';
+    }
+  };
 
   useEffect(() => {
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
-      
-      const chapters = sectionRef.current?.querySelectorAll('.story-chapter');
-      
-      chapters?.forEach((chapter, index) => {
-        ScrollTrigger.create({
-          trigger: chapter,
-          start: 'top 60%', // Trigger slightly earlier for smoother sync
-          end: 'bottom 60%',
-          onEnter: () => setActiveChapter(index),
-          onEnterBack: () => setActiveChapter(index),
-          // markers: true, // Uncomment for debugging
-        });
+
+      // Line Draw Animation - Smoother Easing
+      gsap.fromTo(lineRef.current,
+        { height: '0%' },
+        { 
+          height: '100%',
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top center",
+            end: "bottom bottom",
+            scrub: 0.5
+          }
+        }
+      );
+
+      // Node & Image Parallax Animations
+      const nodes = gsap.utils.toArray('.story-node');
+      nodes.forEach((node: HTMLElement) => {
+         const content = node.querySelector('.story-content');
+         const visual = node.querySelector('.story-visual');
+         const dot = node.querySelector('.story-dot');
+         
+         const tl = gsap.timeline({
+             scrollTrigger: {
+                 trigger: node,
+                 start: "top 75%",
+                 toggleActions: "play none none reverse"
+             }
+         });
+
+         // Entrance
+         tl.fromTo(dot, 
+            { scale: 0, boxShadow: '0 0 0 rgba(0,0,0,0)' }, 
+            { scale: 1, boxShadow: '0 0 20px currentColor', duration: 0.6, ease: "back.out(1.7)" }
+         )
+         .fromTo(content, 
+            { y: 50, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 
+            "-=0.4"
+         )
+         .fromTo(visual, 
+             { opacity: 0, scale: 0.9 },
+             { opacity: 1, scale: 1, duration: 1, ease: "power2.out" },
+             "-=0.6"
+         );
+
+         // Parallax Effect for Visuals
+         // Moves the image slightly differently than the scroll to create depth
+         gsap.to(visual, {
+            yPercent: 30,
+            ease: "none",
+            scrollTrigger: {
+                trigger: node,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
+            }
+         });
       });
-
-      // Force refresh to calculate positions correctly after render
-      ScrollTrigger.refresh();
     }
-
-    return () => {
-        // Cleanup triggers on unmount
-        ScrollTrigger.getAll().forEach((t: any) => t.kill());
-    };
   }, []);
 
   return (
-    <section id="story" ref={sectionRef} className="relative bg-black">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Main Flex Container */}
-        <div className="flex flex-col md:flex-row items-start relative">
-          
-          {/* Sticky Left Side (Visuals) */}
-          <div className="hidden md:flex w-1/2 sticky top-0 h-screen py-20 flex-col justify-center z-10 pointer-events-none">
-             {/* 
-                Image Container 
-                - Added fallback bg-gray-900 to prevent "empty" void if image is slow
-                - Removed potential overflow clipping
-             */}
-             <div className="relative w-full aspect-square max-h-[600px] rounded-[2rem] overflow-hidden border border-white/10 bg-gray-900 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                {/* Stacked Images for Cross-fade */}
+    <section id="story" className="relative py-32 bg-black overflow-hidden border-t border-white/5">
+        
+        {/* Ambient Background */}
+        <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-[10%] left-[20%] w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px]" />
+            <div className="absolute bottom-[10%] right-[20%] w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[100px]" />
+        </div>
+
+        <div ref={containerRef} className="relative max-w-7xl mx-auto px-6">
+            
+            <SectionTitle 
+                eyebrow="CHRONOLOGICAL LOG"
+                title={<span>System <span className="text-jewel">Evolution</span></span>}
+                description="My journey from the high-pressure floor of hospitality to the high-precision world of AI architecture."
+            />
+
+            {/* TIMELINE SPINE */}
+            <div className="absolute left-6 md:left-1/2 top-48 bottom-32 w-[2px] bg-white/5 md:-translate-x-1/2 rounded-full overflow-hidden">
+                <div 
+                    ref={lineRef} 
+                    className="w-full bg-gradient-to-b from-[#00f3ff] via-[#FF3D00] to-[#7e22ce] origin-top rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)]" 
+                />
+            </div>
+
+            {/* CHAPTER NODES */}
+            <div className="flex flex-col gap-24 md:gap-32 relative z-10">
                 {STORY_CHAPTERS.map((chapter, index) => {
-                   const isActive = activeChapter === index;
-                   return (
-                     <div 
-                        key={chapter.id}
-                        className={`absolute inset-0 transition-all duration-700 ease-in-out ${
-                            isActive ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-110 z-0'
-                        }`}
-                     >
-                        <img 
-                            src={chapter.image} 
-                            alt={chapter.title} 
-                            className="w-full h-full object-cover filter brightness-[0.8] contrast-125"
-                        />
-                        {/* Gradient Overlay for Text Readability */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                        
-                        {/* Dynamic Overlay Text on Image */}
-                         <div className={`absolute bottom-8 left-8 right-8 transform transition-all duration-700 delay-200 ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-                            <div className="flex items-center gap-3 mb-2">
-                                <span className={`w-2 h-2 rounded-full ${
-                                    chapter.color === 'cyan' ? 'bg-[#00f3ff] shadow-[0_0_10px_#00f3ff]' :
-                                    chapter.color === 'orange' ? 'bg-[#FF3D00] shadow-[0_0_10px_#FF3D00]' :
-                                    'bg-[#7e22ce] shadow-[0_0_10px_#7e22ce]'
-                                }`}></span>
-                                <span className="font-mono text-xs text-gray-300 tracking-widest uppercase">
-                                    0{chapter.id} // {chapter.subtitle}
-                                </span>
+                    const isEven = index % 2 === 0;
+                    
+                    return (
+                        <div 
+                            key={chapter.id} 
+                            className={`story-node flex flex-col md:flex-row items-center gap-8 md:gap-0 relative ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                        >
+                            {/* CONTENT */}
+                            <div className={`w-full md:w-5/12 pl-12 md:pl-0 story-content ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
+                                <GlassCard 
+                                    className={`p-8 rounded-2xl border-l-4 ${isEven ? 'md:border-l-0 md:border-r-4' : ''} group`} 
+                                    style={{ borderColor: getGlowColor(chapter.color) }}
+                                    hoverEffect={true}
+                                >
+                                    <div className={`font-mono text-xs text-gray-500 mb-4 flex items-center gap-2 ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
+                                        <span className="uppercase tracking-widest text-[#00f3ff] opacity-80">{chapter.subtitle}</span>
+                                        <span className="text-[10px] px-2 py-0.5 rounded bg-white/5 border border-white/10">LOG_0{chapter.id}</span>
+                                    </div>
+                                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 font-display transition-all">
+                                        {chapter.title}
+                                    </h3>
+                                    <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+                                        {chapter.description}
+                                    </p>
+                                </GlassCard>
+                            </div>
+
+                            {/* DOT */}
+                            <div 
+                                className="absolute left-6 md:left-1/2 w-4 h-4 md:-translate-x-1/2 flex items-center justify-center story-dot z-20" 
+                                style={{ color: getGlowColor(chapter.color) }}
+                            >
+                                <div className="w-4 h-4 rounded-full bg-black border-2 border-current z-10 shadow-[0_0_15px_currentColor]" />
+                                <div className="absolute w-8 h-8 rounded-full bg-current opacity-20 animate-ping" />
+                            </div>
+                            
+                            {/* VISUAL */}
+                            <div className={`w-full md:w-5/12 pl-12 md:pl-0 story-visual ${isEven ? 'md:pl-16' : 'md:pr-16'}`}>
+                                <div className="relative group overflow-hidden rounded-xl border border-white/10 bg-[#050505] shadow-2xl aspect-video md:aspect-[4/3] transform transition-transform hover:scale-[1.02]">
+                                    <img 
+                                        src={chapter.image} 
+                                        alt={chapter.title} 
+                                        className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 grayscale group-hover:grayscale-0"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
+                                    <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-white/50" />
+                                    <div className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-white/50" />
+                                </div>
                             </div>
                         </div>
-                     </div>
-                   );
+                    );
                 })}
-             </div>
-          </div>
-
-          {/* Scrolling Right Side (Text) */}
-          <div className="w-full md:w-1/2 relative z-10">
-            {STORY_CHAPTERS.map((chapter, index) => (
-              <div 
-                key={chapter.id} 
-                className="story-chapter min-h-screen flex flex-col justify-center px-4 md:px-16 py-24"
-              >
-                 {/* Text Content Block */}
-                 <div className={`transition-all duration-700 ease-out transform ${
-                    activeChapter === index ? 'opacity-100 translate-x-0' : 'opacity-30 translate-x-0 blur-[2px]'
-                 }`}>
-                    {/* Mobile Only Image */}
-                    <div className="md:hidden mb-8 aspect-video rounded-xl overflow-hidden relative border border-white/10 bg-gray-900">
-                         <img src={chapter.image} className="w-full h-full object-cover" alt={chapter.title} />
-                         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
-                    </div>
-
-                    <div className="flex items-center gap-4 mb-6">
-                        <span className={`h-[1px] w-12 ${
-                            chapter.color === 'cyan' ? 'bg-[#00f3ff]' :
-                            chapter.color === 'orange' ? 'bg-[#FF3D00]' : 'bg-[#7e22ce]'
-                        }`}></span>
-                        <span className="font-mono text-xs tracking-widest text-gray-400 uppercase">{chapter.subtitle}</span>
-                    </div>
-
-                    <h2 className="text-5xl md:text-6xl font-display font-bold mb-8 leading-[0.9] text-white">
-                        {chapter.title}
-                    </h2>
-                    
-                    <GlassCard className="p-8 md:p-10 rounded-3xl bg-white/[0.03] border-white/10" hoverEffect={false}>
-                        <p className="text-lg md:text-xl text-gray-300 leading-relaxed font-light">
-                            {chapter.description}
-                        </p>
-                    </GlassCard>
-                 </div>
-              </div>
-            ))}
-            
-            {/* Spacer to ensure last item clears nicely */}
-            <div className="h-[20vh]"></div>
-          </div>
+            </div>
         </div>
-      </div>
     </section>
   );
 };

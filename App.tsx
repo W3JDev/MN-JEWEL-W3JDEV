@@ -11,25 +11,46 @@ import Expertise from './components/Sections/Expertise';
 import Services from './components/Sections/Services';
 import Projects from './components/Sections/Projects';
 import Testimonials from './components/Sections/Testimonials';
+import Clients from './components/Sections/Clients';
 import Blueprint from './components/Sections/Blueprint';
 import FAQ from './components/Sections/FAQ';
 import Hobbies from './components/Sections/Hobbies';
 import Newsletter from './components/Sections/Newsletter';
 import Contact from './components/Sections/Contact';
 import Modal from './components/UI/Modal';
+import SystemStatus from './components/UI/SystemStatus';
+import { Project } from './types'; // Import type
+import { PROJECTS } from './constants'; // Import constants to lookup if needed
 
 const App: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeProject, setActiveProject] = useState<string | null>(null);
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [modalMode, setModalMode] = useState<'demo' | 'case-study'>('demo');
 
-  const handleOpenModal = (projectTitle: string) => {
-    setActiveProject(projectTitle);
-    setModalOpen(true);
+  const handleOpenDemo = (projectTitle: string) => {
+    const project = PROJECTS.find(p => p.title === projectTitle);
+    if (project) {
+        setActiveProject(project);
+        setModalMode('demo');
+        setModalOpen(true);
+    }
+  };
+
+  const handleOpenCaseStudy = (projectTitle: string) => {
+    const project = PROJECTS.find(p => p.title === projectTitle);
+    if (project) {
+        setActiveProject(project);
+        setModalMode('case-study');
+        setModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setTimeout(() => setActiveProject(null), 300);
+    setTimeout(() => {
+        setActiveProject(null);
+        setModalMode('demo'); // Reset to default
+    }, 300);
   };
 
   return (
@@ -37,6 +58,7 @@ const App: React.FC = () => {
       <Loader />
       <CustomCursor />
       <GrainOverlay />
+      <SystemStatus />
       
       {/* Background Layers */}
       <ThreeBackground />
@@ -45,12 +67,13 @@ const App: React.FC = () => {
       <Navbar />
       
       <main className="relative z-10">
-        <Hero />
+        <div id="hero"><Hero /></div>
         <Story />
         <Expertise />
         <Services />
-        <Projects onOpenModal={handleOpenModal} />
+        <Projects onOpenModal={handleOpenDemo} onOpenCaseStudy={handleOpenCaseStudy} />
         <Testimonials />
+        <Clients />
         <Blueprint />
         <FAQ />
         <Hobbies />
@@ -62,7 +85,8 @@ const App: React.FC = () => {
       <Modal 
         isOpen={modalOpen} 
         onClose={handleCloseModal} 
-        title={activeProject} 
+        project={activeProject}
+        mode={modalMode}
       />
     </div>
   );

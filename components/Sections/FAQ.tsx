@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { FAQS } from '../../constants';
 import GlassCard from '../UI/GlassCard';
+import SectionTitle from '../UI/SectionTitle';
 
 const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 relative overflow-hidden">
-      <div className="max-w-3xl mx-auto px-6">
-        <h2 className="font-display text-4xl font-bold mb-12 text-center">Protocol Specs <span className="text-gray-600">(FAQ)</span></h2>
+    <section className="py-32 relative overflow-hidden border-t border-white/5">
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
+        
+        <SectionTitle 
+            eyebrow="PROTOCOL SPECS"
+            title={<span>System <span className="text-gray-600">(FAQ)</span></span>}
+            description="Operational parameters and engagement protocols."
+        />
         
         <div className="flex flex-col gap-4">
           {FAQS.map((faq, index) => {

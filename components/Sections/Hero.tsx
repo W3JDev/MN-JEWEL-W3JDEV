@@ -8,28 +8,47 @@ declare const gsap: any;
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof gsap !== 'undefined') {
       const tl = gsap.timeline();
+      
+      // Card Entrance
+      tl.fromTo(cardRef.current, 
+        { scale: 0.9, opacity: 0, rotationX: 10 },
+        { scale: 1, opacity: 1, rotationX: 0, duration: 1.2, ease: 'power3.out' }
+      );
+
+      // Content Stagger
       tl.fromTo(heroRef.current?.querySelectorAll('.hero-anim'),
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: 'power3.out', delay: 0.2 }
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out' },
+        "-=0.8"
       );
     }
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!contentRef.current || typeof gsap === 'undefined') return;
+    if (!contentRef.current || !cardRef.current || typeof gsap === 'undefined') return;
     
     const { clientX, clientY } = e;
     const { innerWidth, innerHeight } = window;
     
-    // Calculate normalized mouse position (-1 to 1)
+    // Normalize coordinates -1 to 1
     const x = (clientX / innerWidth - 0.5) * 2;
     const y = (clientY / innerHeight - 0.5) * 2;
 
-    // Animate text elements with different intensities for parallax depth
+    // Subtle Card Tilt
+    gsap.to(cardRef.current, {
+        rotationY: x * 5,
+        rotationX: -y * 5,
+        duration: 1.5,
+        ease: 'power2.out',
+        transformPerspective: 1000
+    });
+
+    // Content Parallax (Opposite direction for depth)
     gsap.to(contentRef.current.querySelector('h1'), {
         x: x * 20,
         y: y * 20,
@@ -58,17 +77,20 @@ const Hero: React.FC = () => {
 
   return (
     <section 
-        className="min-h-screen flex flex-col justify-center items-center relative px-6 pt-20 overflow-hidden"
+        className="min-h-screen flex flex-col justify-center items-center relative px-6 pt-20 overflow-hidden perspective-1000"
         onMouseMove={handleMouseMove}
     >
       
       {/* 3D Depth Glass Container */}
       <div className="relative z-10 max-w-6xl w-full">
-        <div className="relative bg-[#050505]/50 backdrop-blur-2xl rounded-[3rem] border border-white/10 p-12 md:p-20 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_0_0_1px_rgba(255,255,255,0.05)] overflow-hidden group">
+        <div ref={cardRef} className="relative bg-[#050505]/50 backdrop-blur-2xl rounded-[3rem] border border-white/10 p-12 md:p-20 shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_0_0_1px_rgba(255,255,255,0.05)] overflow-hidden group will-change-transform">
           
           {/* Inner Generative Noise/Texture */}
           <div className="absolute inset-0 opacity-[0.05] pointer-events-none z-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
           
+          {/* Scanline Effect - Cyber Noir Add-on */}
+          <div className="absolute inset-0 pointer-events-none z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] bg-repeat animate-[scanline_10s_linear_infinite] opacity-20 mix-blend-overlay"></div>
+
           {/* BACKGROUND IMAGE - Fixed Visibility */}
           <div className="absolute inset-0 z-0 pointer-events-none">
              <img 
@@ -79,10 +101,10 @@ const Hero: React.FC = () => {
              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/90 to-[#050505]/40"></div>
           </div>
 
-          <div ref={heroRef} className="text-center relative z-10">
+          <div ref={heroRef} className="text-center relative z-20">
              <div ref={contentRef}>
                 {/* Status Badge */}
-                <div className="badge-container hero-anim opacity-0 inline-flex items-center gap-3 mb-8 px-4 py-2 bg-black/60 rounded-full border border-green-500/30 backdrop-blur-md shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                <div className="badge-container hero-anim opacity-0 inline-flex items-center gap-3 mb-8 px-4 py-2 bg-black/60 rounded-full border border-green-500/30 backdrop-blur-md shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:border-green-400/50 transition-colors cursor-crosshair">
                   <span className="relative flex h-2.5 w-2.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
@@ -109,7 +131,7 @@ const Hero: React.FC = () => {
             <div className="hero-anim opacity-0 w-32 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent mx-auto mb-10"></div>
 
             {/* Executive Summary TL;DR */}
-            <div className="hero-anim opacity-0 font-mono text-gray-400 max-w-2xl mx-auto mb-12 text-xs md:text-sm tracking-wide leading-relaxed bg-black/40 border border-white/5 p-6 rounded-xl backdrop-blur-md">
+            <div className="hero-anim opacity-0 font-mono text-gray-400 max-w-2xl mx-auto mb-12 text-xs md:text-sm tracking-wide leading-relaxed bg-black/40 border border-white/5 p-6 rounded-xl backdrop-blur-md hover:border-white/10 transition-colors">
                <p className="mb-2"><span className="text-[#00f3ff] font-bold">/// SYSTEM STATUS:</span></p>
                <p>
                  I transform <span className="text-white">champagne problems</span> into <span className="text-white">prosecco-budget fixes</span>. 
@@ -149,6 +171,10 @@ const Hero: React.FC = () => {
         @keyframes ticker {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
+        }
+        @keyframes scanline {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% 100%; }
         }
       `}</style>
     </section>

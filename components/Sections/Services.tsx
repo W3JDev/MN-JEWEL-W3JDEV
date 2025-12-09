@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { SERVICES } from '../../constants';
 import GlassCard from '../UI/GlassCard';
 import Button from '../UI/Button';
+import SectionTitle from '../UI/SectionTitle';
 
 declare const gsap: any;
 declare const ScrollTrigger: any;
@@ -14,25 +15,21 @@ const Services: React.FC = () => {
       gsap.registerPlugin(ScrollTrigger);
       
       const cards = sectionRef.current?.querySelectorAll('.service-card');
-      
-      if (cards && cards.length > 0) {
+      if (cards) {
         gsap.fromTo(cards, 
-          { 
-            y: 50, 
-            opacity: 0 
-          }, 
-          {
-            y: 0, 
-            opacity: 1, 
-            duration: 0.8, 
-            stagger: 0.2, 
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 75%",
-              toggleActions: "play none none reverse"
+            { y: 50, opacity: 0, rotateX: 10 },
+            { 
+              y: 0, 
+              opacity: 1, 
+              rotateX: 0,
+              duration: 0.8, 
+              stagger: 0.15, 
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 70%",
+              }
             }
-          }
         );
       }
     }
@@ -40,9 +37,9 @@ const Services: React.FC = () => {
 
   const getBorderColor = (color: string) => {
      const map: Record<string, string> = {
-      cyan: 'hover:border-[#00f3ff]',
-      orange: 'hover:border-[#FF3D00]',
-      purple: 'hover:border-[#7e22ce]',
+      cyan: 'group-hover:border-[#00f3ff]',
+      orange: 'group-hover:border-[#FF3D00]',
+      purple: 'group-hover:border-[#7e22ce]',
     };
     return map[color];
   };
@@ -57,47 +54,51 @@ const Services: React.FC = () => {
   };
 
   return (
-    <section id="services" ref={sectionRef} className="py-24 relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
-            <div className="text-center mb-16">
-                <h2 className="font-display text-4xl font-bold mb-4">Engagement Models</h2>
-                <p className="text-gray-400 max-w-2xl mx-auto">
-                    I don't just "write code". I solve business problems. Choose the protocol that fits your mission.
-                </p>
-            </div>
+    <section id="services" ref={sectionRef} className="py-32 relative overflow-hidden border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+            
+            <SectionTitle 
+                eyebrow="ENGAGEMENT MODELS"
+                title="Service Protocols"
+                description="I don't just 'write code'. I solve business problems. Choose the protocol that fits your mission."
+            />
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-8">
                 {SERVICES.map((service) => (
-                    <GlassCard 
-                        key={service.title} 
-                        className={`service-card opacity-0 p-8 rounded-2xl flex flex-col relative group border-t-4 border-t-transparent ${getBorderColor(service.color)}`}
-                    >
-                         <div className={`w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-6 text-2xl ${getIconColor(service.color)}`}>
-                            <span className="material-symbols-outlined">{service.icon}</span>
-                         </div>
-                         
-                         <h3 className="text-2xl font-display font-bold mb-2">{service.title}</h3>
-                         <div className="inline-block px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 mb-6 w-fit">
-                            {service.price}
-                         </div>
-                         
-                         <p className="text-gray-400 text-sm mb-8 leading-relaxed flex-grow">
-                            {service.description}
-                         </p>
+                    <div key={service.title} className="service-card opacity-0">
+                        <GlassCard 
+                            className={`p-8 rounded-2xl flex flex-col relative group border-t-4 border-t-transparent transition-all duration-300 ${getBorderColor(service.color)} hover:-translate-y-2`}
+                        >
+                             {/* Hover Glow Background */}
+                             <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-${service.color === 'cyan' ? 'cyan-500' : service.color === 'orange' ? 'orange-500' : 'purple-500'}`} />
 
-                         <ul className="space-y-3 mb-8">
-                            {service.features.map(feature => (
-                                <li key={feature} className="flex items-center gap-3 text-sm text-gray-300">
-                                    <span className={`material-symbols-outlined text-sm ${getIconColor(service.color)}`}>check_circle</span>
-                                    {feature}
-                                </li>
-                            ))}
-                         </ul>
+                             <div className={`w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center mb-8 text-3xl ${getIconColor(service.color)} transition-transform duration-500 group-hover:scale-110 shadow-[0_0_20px_rgba(0,0,0,0.2)]`}>
+                                <span className="material-symbols-outlined">{service.icon}</span>
+                             </div>
+                             
+                             <h3 className="text-2xl font-display font-bold mb-2 z-10">{service.title}</h3>
+                             <div className="inline-block px-3 py-1 bg-white/5 rounded-full text-xs font-mono text-gray-300 mb-6 w-fit border border-white/5 z-10">
+                                /// {service.price.toUpperCase()}
+                             </div>
+                             
+                             <p className="text-gray-400 text-sm mb-8 leading-relaxed flex-grow z-10">
+                                {service.description}
+                             </p>
 
-                         <Button variant="glass" className="w-full group-hover:bg-white/10">
-                            Discuss Scope
-                         </Button>
-                    </GlassCard>
+                             <ul className="space-y-4 mb-8 z-10">
+                                {service.features.map(feature => (
+                                    <li key={feature} className="flex items-center gap-3 text-sm text-gray-300 font-mono">
+                                        <span className={`material-symbols-outlined text-sm ${getIconColor(service.color)}`}>check</span>
+                                        {feature}
+                                    </li>
+                                ))}
+                             </ul>
+
+                             <Button variant="glass" className="w-full group-hover:bg-white/10 z-10">
+                                Discuss Scope
+                             </Button>
+                        </GlassCard>
+                    </div>
                 ))}
             </div>
         </div>

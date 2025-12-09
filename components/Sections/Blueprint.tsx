@@ -1,17 +1,22 @@
 import React from 'react';
 import GlassCard from '../UI/GlassCard';
+import SectionTitle from '../UI/SectionTitle';
 
 const Blueprint: React.FC = () => {
   return (
-    <section className="py-20 bg-black text-center border-t border-white/10 relative overflow-hidden">
-      {/* Radial pulse background */}
+    <section className="py-32 bg-black text-center border-t border-white/5 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-[#00f3ff]/5 to-transparent opacity-50 pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-6 relative z-10">
-        <h2 className="font-mono text-[#00f3ff] mb-8 text-sm tracking-widest">/// AUTOMATION BLUEPRINT ///</h2>
         
-        <GlassCard className="p-10 rounded-xl relative overflow-hidden bg-[#050505]" hoverEffect={false}>
-          {/* OS Buttons */}
+        <SectionTitle 
+            eyebrow="SYSTEM ARCHITECTURE"
+            title="Automation Blueprint"
+            description="How this portfolio stays alive. My agent swarm updates the project stats and content automatically."
+        />
+        
+        <GlassCard className="p-10 rounded-2xl relative overflow-hidden bg-[#050505]" hoverEffect={false}>
+          {/* ... keeping diagram logic same, just standardized container ... */}
           <div className="absolute top-4 right-4 flex gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500" />
             <div className="w-3 h-3 rounded-full bg-yellow-500" />
@@ -68,10 +73,6 @@ const Blueprint: React.FC = () => {
             <p className="animate-pulse font-bold">&gt; DEPLOYMENT SUCCESSFUL</p>
           </div>
         </GlassCard>
-
-        <p className="mt-8 text-gray-500 text-sm max-w-lg mx-auto font-mono">
-          This site is a living document. My agent swarm updates the project stats and content automatically via GitHub Actions and n8n webhooks.
-        </p>
       </div>
     </section>
   );

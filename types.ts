@@ -1,3 +1,11 @@
+
+export interface CaseStudyContent {
+  challenge: string;
+  solution: string;
+  results: string[];
+  techDeepDive: string;
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -8,7 +16,8 @@ export interface Project {
   tags: string[];
   image: string;
   liveLink?: string;
-  caseStudyLink?: string;
+  caseStudyLink?: string; // Kept for backward compatibility or external links
+  caseStudyContent?: CaseStudyContent; // New internal content
   repoLink?: string;
 }
 

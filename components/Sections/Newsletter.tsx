@@ -15,7 +15,7 @@ const Newsletter: React.FC = () => {
   };
 
   return (
-    <section className="py-24 relative overflow-hidden bg-[#050505] border-t border-white/5">
+    <section className="py-32 relative overflow-hidden bg-[#050505] border-t border-white/5">
        {/* Background abstract forms */}
        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#00f3ff]/5 rounded-full blur-[120px]" />

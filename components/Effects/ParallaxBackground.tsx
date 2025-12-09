@@ -13,15 +13,17 @@ const ParallaxBackground: React.FC = () => {
       const rows = containerRef.current?.querySelectorAll('.parallax-text-row');
       
       rows?.forEach((row, i) => {
+        // Alternating direction for visual interest
         const direction = i % 2 === 0 ? 1 : -1;
+        
         gsap.to(row, {
-          x: direction * 200, // Move 200px left or right
+          x: direction * 200, 
           ease: "none",
           scrollTrigger: {
             trigger: document.body,
             start: "top top",
             end: "bottom bottom",
-            scrub: 1
+            scrub: 1 // Increased scrub for smoother inertia
           }
         });
       });
@@ -29,19 +31,27 @@ const ParallaxBackground: React.FC = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex flex-col justify-center opacity-[0.03] select-none">
-      <div className="parallax-text-row text-[15vh] md:text-[20vh] font-display font-bold whitespace-nowrap text-transparent stroke-text leading-none">
-        ARCHITECT ENGINEER BUILDER ARCHITECT ENGINEER BUILDER
+    <div ref={containerRef} className="fixed inset-0 pointer-events-none z-0 overflow-hidden flex flex-col justify-center select-none bg-black">
+      
+      {/* Premium Diagonal Layout */}
+      <div className="absolute inset-0 flex flex-col justify-center items-center opacity-[0.03] transform -rotate-[15deg] scale-125 origin-center">
+          {[...Array(8)].map((_, i) => (
+             <div 
+               key={i} 
+               className={`parallax-text-row w-[200vw] text-center font-display font-bold whitespace-nowrap leading-none py-4 ${i % 2 === 0 ? 'text-white' : 'text-transparent stroke-text'}`}
+               style={{ fontSize: '8vw' }}
+             >
+                 ARCHITECT /// ENGINEER /// BUILDER /// AUTOMATION /// DEFI /// AI /// OPS /// SCALE
+             </div>
+          ))}
       </div>
-      <div className="parallax-text-row text-[15vh] md:text-[20vh] font-display font-bold whitespace-nowrap text-transparent stroke-text leading-none ml-[-200px]">
-        AUTOMATION DEFI AI AUTOMATION DEFI AI
-      </div>
-      <div className="parallax-text-row text-[15vh] md:text-[20vh] font-display font-bold whitespace-nowrap text-transparent stroke-text leading-none">
-        SYSTEMS DESIGN SCALE SYSTEMS DESIGN SCALE
-      </div>
+
+      {/* Radial Vignette Mask */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#050505_90%)]"></div>
+
       <style>{`
         .stroke-text {
-          -webkit-text-stroke: 2px #fff;
+          -webkit-text-stroke: 1px rgba(255,255,255,0.5);
         }
       `}</style>
     </div>
