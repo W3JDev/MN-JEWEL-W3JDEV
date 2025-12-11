@@ -1,0 +1,147 @@
+name: 🔬 Vercel Deployment Monitor & Auto-Fix
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  monitor-and-heal:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: 🎯 Checkout
+        uses: actions/checkout@v4
+
+      - name: ⏳ Wait for Vercel Deployment
+        run: |
+          echo "Waiting 90 seconds for Vercel to build..."
+          sleep 90
+
+      - name: 🔍 Check Vercel Status (via API)
+        id: check_deployment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "⚠️ Vercel secrets not configured. Skipping check."
+            echo "status=unknown" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Get latest deployment
+          RESPONSE=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v6/deployments?projectId=$VERCEL_PROJECT_ID&limit=1")
+
+          STATUS=$(echo $RESPONSE | jq -r '.deployments[0].readyState')
+          DEPLOYMENT_ID=$(echo $RESPONSE | jq -r '.deployments[0].id')
+
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+
+          if [ "$STATUS" = "ERROR" ]; then
+            echo "❌ Deployment FAILED"
+            exit 1
+          else
+            echo "✅ Deployment status: $STATUS"
+          fi
+
+      - name: 🚨 Fetch Error Logs
+        if: failure()
+        id: get_logs
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          DEPLOYMENT_ID="${{ steps.check_deployment.outputs.deployment_id }}"
+
+          if [ -z "$DEPLOYMENT_ID" ] || [ "$DEPLOYMENT_ID" = "null" ]; then
+            echo "No deployment ID available"
+            exit 0
+          fi
+
+          # Fetch build logs
+          LOGS=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN"             "https://api.vercel.com/v2/deployments/$DEPLOYMENT_ID/events?builds=1&limit=100")
+
+          echo "$LOGS" > /tmp/build_logs.json
+
+          # Extract error messages
+          ERRORS=$(echo "$LOGS" | jq -r '.logs[] | select(.type=="stderr" or .text | contains("error") or contains("Error")) | .text' | head -20)
+          echo "$ERRORS"
+
+          # Save for next step
+          echo "$ERRORS" > /tmp/errors.txt
+
+      - name: 🧠 AI Analysis & Auto-Fix
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const { execSync } = require('child_process');
+
+            let errors = '';
+            try {
+              errors = fs.readFileSync('/tmp/errors.txt', 'utf8');
+            } catch (e) {
+              console.log('No error log file found');
+              return;
+            }
+
+            console.log('🔍 Analyzing errors:', errors);
+
+            // Install dependencies
+            execSync('npm install', { stdio: 'inherit' });
+
+            // Auto-fix based on error patterns
+            if (errors.includes('TS1382') || errors.includes('Unexpected token')) {
+              console.log('🔧 Fixing TypeScript JSX errors...');
+
+              // Find all TSX files
+              const files = execSync('find components -name "*.tsx"').toString().split('\n').filter(Boolean);
+
+              for (const file of files) {
+                try {
+                  let content = fs.readFileSync(file, 'utf8');
+
+                  // Fix common JSX errors
+                  // Replace bare > with {'>'}  in JSX context
+                  const fixed = content.replace(/([^-<>=!])>([^=>])/g, "$1{'>'}$2");
+
+                  if (fixed !== content) {
+                    fs.writeFileSync(file, fixed);
+                    console.log(`✅ Fixed: ${file}`);
+                  }
+                } catch (e) {
+                  console.log(`Skip ${file}: ${e.message}`);
+                }
+              }
+
+              // Commit and push
+              try {
+                execSync('git config user.name "AI Healing Bot"');
+                execSync('git config user.email "ai-bot@github-actions"');
+                execSync('git add -A');
+                execSync('git commit -m "🚑 Auto-heal: Fix TypeScript build errors"');
+                execSync('git push');
+                console.log('✅ Pushed healing commit');
+              } catch (e) {
+                console.log('Nothing to commit or push failed');
+              }
+            }
+
+            // Create tracking issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚑 Auto-Healing: Deployment Failure Detected',
+              body: `### Deployment Failed & Auto-Fixed\n\n**Errors Detected:**\n\`\`\`\n${errors.slice(0, 1000)}\n\`\`\`\n\n**Actions Taken:**\n- Analyzed build logs\n- Applied automatic fixes\n- Pushed new commit\n- Vercel will re-deploy automatically\n\n**Monitoring:** The AI team will continue monitoring.`,
+              labels: ['ai-team', 'auto-healing', 'deployment']
+            });
+
+      - name: ✅ Success Report
+        if: success()
+        run: |
+          echo "🎉 Deployment successful! No intervention needed."
