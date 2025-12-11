@@ -4,27 +4,37 @@ import GlassCard from '../UI/GlassCard';
 
 const Clients: React.FC = () => {
   return (
-    <section className="py-16 bg-black border-b border-white/5 relative z-10">
+    <section className="py-24 bg-black border-b border-white/5 relative z-10">
       <div className="max-w-7xl mx-auto px-6 text-center">
-         <p className="font-mono text-[10px] md:text-xs text-gray-600 mb-10 tracking-[0.3em] uppercase">
-            Trusted By Industry Leaders
-         </p>
+         <div className="inline-flex items-center gap-3 mb-12 opacity-80">
+            <span className="h-[1px] w-8 bg-gray-700"></span>
+            <p className="font-mono text-xs md:text-sm text-gray-400 tracking-[0.3em] uppercase">
+                Trusted By Industry Leaders
+            </p>
+            <span className="h-[1px] w-8 bg-gray-700"></span>
+         </div>
          
-         <div className="flex flex-wrap justify-center gap-12 md:gap-24 items-center opacity-50">
+         {/* Removed parent opacity and grayscale to make them CLEARLY VISIBLE */}
+         <div className="flex flex-wrap justify-center gap-12 md:gap-24 items-center">
             {CLIENTS.map((client) => (
-               <div key={client.name} className="group transition-all duration-300 hover:opacity-100 hover:scale-110 cursor-pointer grayscale hover:grayscale-0">
-                   {client.logo ? (
+               <div key={client.name} className="group transition-transform duration-300 hover:scale-105 cursor-default relative">
+                   {/* Optional Glow Effect on Hover */}
+                   <div className="absolute inset-0 bg-white/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                   {client.logo && !client.logo.includes('placehold.co') ? (
                       <img 
                         src={client.logo} 
                         alt={client.name} 
-                        className="h-8 md:h-12 w-auto object-contain brightness-0 invert opacity-70 group-hover:opacity-100 group-hover:brightness-100 group-hover:invert-0 transition-all duration-500"
+                        className="h-10 md:h-14 w-auto object-contain relative z-10 filter brightness-100 contrast-125"
                       />
                    ) : (
-                     <svg height="30" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-6 md:h-8 w-auto">
-                          <text x="0" y="30" fill="currentColor" className="text-gray-400 group-hover:text-white transition-colors font-display font-bold text-2xl uppercase tracking-tighter">
-                              {client.name}
-                          </text>
-                     </svg>
+                     /* Fallback text rendering if logo is placeholder or text */
+                     /* Rendered as bright white/gray text */
+                     <div className="relative z-10 px-4 py-2 border border-white/5 bg-white/5 rounded-lg backdrop-blur-sm group-hover:border-white/20 transition-colors">
+                        <span className="font-display font-bold text-xl md:text-2xl text-gray-200 group-hover:text-white uppercase tracking-tight">
+                            {client.name}
+                        </span>
+                     </div>
                    )}
                </div>
             ))}

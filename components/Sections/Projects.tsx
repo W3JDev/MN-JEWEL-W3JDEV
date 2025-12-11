@@ -9,7 +9,7 @@ declare const ScrollTrigger: any;
 
 interface ProjectsProps {
   onOpenModal: (projectTitle: string) => void;
-  onOpenCaseStudy: (projectTitle: string) => void; // Added handler
+  onOpenCaseStudy: (projectTitle: string) => void;
 }
 
 const Projects: React.FC<ProjectsProps> = ({ onOpenModal, onOpenCaseStudy }) => {
@@ -22,19 +22,40 @@ const Projects: React.FC<ProjectsProps> = ({ onOpenModal, onOpenCaseStudy }) => 
       const cards = gsap.utils.toArray(".project-stack-card");
       
       cards.forEach((card: HTMLElement, i: number) => {
+        const image = card.querySelector('img');
+
+        // Internal Image Parallax (Subtle window effect)
+        if (image) {
+             gsap.fromTo(image, 
+                { scale: 1.1, yPercent: -5 },
+                { 
+                    scale: 1.1, 
+                    yPercent: 5, 
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1
+                    }
+                }
+             );
+        }
+
         const nextCard = cards[i + 1];
         if (nextCard) {
              ScrollTrigger.create({
                 trigger: nextCard,
                 start: "top bottom", 
                 end: "top top",      
-                scrub: 1, // Smoother scrubbing for weightier feel
+                scrub: 1.2, // Smoother scrubbing
                 onUpdate: (self: any) => {
                     gsap.to(card, {
-                        scale: 1 - (self.progress * 0.1), // Subtle scale down
-                        opacity: 1 - (self.progress * 0.4), // Fade out slightly
-                        filter: `brightness(${1 - (self.progress * 0.5)}) blur(${self.progress * 8}px)`, // Cinematic blur
-                        y: -40 * self.progress,
+                        scale: 1 - (self.progress * 0.08), // Increased depth scale
+                        opacity: 1 - (self.progress * 0.4), 
+                        filter: `brightness(${1 - (self.progress * 0.4)}) blur(${self.progress * 5}px)`, 
+                        y: -50 * self.progress, // Float up slightly
+                        transformOrigin: "center top",
                         overwrite: true,
                         ease: "power1.out"
                     });
@@ -78,13 +99,13 @@ const Projects: React.FC<ProjectsProps> = ({ onOpenModal, onOpenCaseStudy }) => 
             <div className="relative w-full h-full bg-[#0a0a0a] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] group transition-transform duration-700">
                 
                 {/* BACKGROUND VISION */}
-                <div className="absolute inset-0 z-0 bg-black">
+                <div className="absolute inset-0 z-0 bg-black overflow-hidden">
                     <img 
                         src={project.image} 
                         alt={project.title} 
-                        className="w-full h-full object-cover opacity-50 transition-transform duration-[20s] ease-linear scale-100 group-hover:scale-125 grayscale group-hover:grayscale-0"
+                        className="w-full h-full object-cover opacity-40 transition-opacity duration-700 grayscale group-hover:grayscale-0 will-change-transform"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/90 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/95 to-transparent" />
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,6px_100%] pointer-events-none opacity-20" />
                 </div>
 
@@ -127,16 +148,22 @@ const Projects: React.FC<ProjectsProps> = ({ onOpenModal, onOpenCaseStudy }) => 
                              </div>
                              
                              <div className="flex items-center gap-4">
-                                {/* Case Study Button - Launches INTERNAL modal */}
-                                {(project.caseStudyContent || project.caseStudyLink) && (
+                                {/* Case Study Button */}
+                                {(project.caseStudyContent || (project.caseStudyLink && project.caseStudyLink !== '#' && project.caseStudyLink !== undefined)) && (
                                    <div 
                                      className="opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 delay-100"
                                    >
                                       <Button 
                                         variant="glass" 
-                                        icon="menu_book"
-                                        onClick={() => onOpenCaseStudy(project.title)} // New handler
-                                        className="text-xs px-5 py-3 bg-white/5 hover:bg-white/10 backdrop-blur-xl border-white/20 text-gray-300 hover:text-white"
+                                        icon="description"
+                                        onClick={() => {
+                                            if (project.caseStudyLink && project.caseStudyLink !== '#' && !project.caseStudyContent) {
+                                                window.open(project.caseStudyLink, '_blank');
+                                            } else {
+                                                onOpenCaseStudy(project.title);
+                                            }
+                                        }} 
+                                        className="text-xs px-5 py-3 !bg-[#FF3D00]/5 hover:!bg-[#FF3D00]/10 !border-[#FF3D00]/30 text-[#FF3D00] hover:text-[#FF3D00] shadow-[0_0_10px_rgba(255,61,0,0.1)] hover:shadow-[0_0_20px_rgba(255,61,0,0.2)]"
                                       >
                                         Case Study
                                       </Button>
@@ -145,7 +172,7 @@ const Projects: React.FC<ProjectsProps> = ({ onOpenModal, onOpenCaseStudy }) => 
 
                                 <Button 
                                     onClick={() => onOpenModal(project.title)} 
-                                    className="bg-white text-black hover:bg-gray-200"
+                                    className="bg-white text-black hover:bg-gray-200 shadow-xl shadow-white/5"
                                     icon="visibility"
                                 >
                                     Initialize Demo

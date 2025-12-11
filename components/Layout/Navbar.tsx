@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
 
         {/* Logo */}
         <a href="#" className="relative z-10 font-display font-bold text-xl tracking-tighter hover:text-[#00f3ff] transition-colors flex items-center gap-1">
-          w3.ai<span className="text-[#FF3D00]">.</span>
+          W3JDEV<span className="text-[#FF3D00]">.</span>
         </a>
 
         {/* Desktop Nav */}

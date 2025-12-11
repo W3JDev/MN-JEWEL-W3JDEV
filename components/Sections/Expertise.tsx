@@ -123,21 +123,23 @@ const Expertise: React.FC = () => {
         </div>
         
         {/* --- RUNNING ICONS (TECH STACK MARQUEE) --- */}
-        <div className="relative pt-10 border-t border-white/5">
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
+        {/* UPDATED: Increased vertical padding and borders to match the requested 'white marked border' weight. */}
+        <div className="relative py-12 md:py-16 border-y border-white/10 -mx-6 w-[calc(100%+3rem)] bg-black/30 backdrop-blur-md overflow-hidden shadow-2xl">
+            <div className="absolute left-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
             
             <div className="flex overflow-hidden group">
                 {/* Loop duplicated for infinite effect */}
                 {[1, 2, 3].map((iter) => (
                     <div key={iter} className="flex animate-[ticker_30s_linear_infinite] group-hover:[animation-play-state:paused] flex-shrink-0 items-center">
                         {TECH_STACK.map((tech, i) => (
-                            <div key={`${iter}-${i}`} className="flex items-center gap-4 px-10 opacity-60 hover:opacity-100 transition-all duration-300 cursor-default grayscale hover:grayscale-0 hover:scale-110 transform">
+                            <div key={`${iter}-${i}`} className="flex items-center gap-6 md:gap-8 px-8 md:px-12 opacity-60 hover:opacity-100 transition-all duration-300 cursor-default grayscale hover:grayscale-0 hover:scale-110 transform">
                                 {/* SVG Logo from constants */}
-                                {tech.logo && <img src={tech.logo} alt={tech.name} className="w-8 h-8 md:w-10 md:h-10 object-contain drop-shadow-lg" />}
+                                {tech.logo && <img src={tech.logo} alt={tech.name} className="w-10 h-10 md:w-16 md:h-16 object-contain drop-shadow-xl" />}
                                 
+                                {/* HUGE TEXT AS REQUESTED */}
                                 <span 
-                                    className="text-xl font-bold font-display tracking-wide" 
+                                    className="text-3xl md:text-5xl font-bold font-display tracking-wide whitespace-nowrap" 
                                     style={{ color: tech.color }}
                                 >
                                     {tech.name}

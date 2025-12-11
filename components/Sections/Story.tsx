@@ -9,6 +9,8 @@ declare const ScrollTrigger: any;
 const Story: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const bg1Ref = useRef<HTMLDivElement>(null);
+  const bg2Ref = useRef<HTMLDivElement>(null);
 
   const getGlowColor = (color: string) => {
     switch (color) {
@@ -23,7 +25,31 @@ const Story: React.FC = () => {
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
 
-      // Line Draw Animation - Smoother Easing
+      // --- Background Parallax (Subtle Depth) ---
+      if (bg1Ref.current && bg2Ref.current) {
+          gsap.to(bg1Ref.current, {
+              y: '20%',
+              ease: "none",
+              scrollTrigger: {
+                  trigger: containerRef.current,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 1.5
+              }
+          });
+          gsap.to(bg2Ref.current, {
+              y: '-20%',
+              ease: "none",
+              scrollTrigger: {
+                  trigger: containerRef.current,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 2
+              }
+          });
+      }
+
+      // --- Line Draw Animation ---
       gsap.fromTo(lineRef.current,
         { height: '0%' },
         { 
@@ -31,56 +57,77 @@ const Story: React.FC = () => {
           ease: "none",
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top center",
-            end: "bottom bottom",
+            start: "top center+=100", // Start slightly later for better timing
+            end: "bottom bottom-=100",
             scrub: 0.5
           }
         }
       );
 
-      // Node & Image Parallax Animations
+      // --- Node & Visual Parallax ---
       const nodes = gsap.utils.toArray('.story-node');
       nodes.forEach((node: HTMLElement) => {
          const content = node.querySelector('.story-content');
          const visual = node.querySelector('.story-visual');
+         const image = node.querySelector('img'); // Internal image
          const dot = node.querySelector('.story-dot');
          
          const tl = gsap.timeline({
              scrollTrigger: {
                  trigger: node,
-                 start: "top 75%",
+                 start: "top 80%", // Trigger entrance a bit earlier
                  toggleActions: "play none none reverse"
              }
          });
 
-         // Entrance
+         // Entrance Sequence
          tl.fromTo(dot, 
             { scale: 0, boxShadow: '0 0 0 rgba(0,0,0,0)' }, 
-            { scale: 1, boxShadow: '0 0 20px currentColor', duration: 0.6, ease: "back.out(1.7)" }
+            { scale: 1, boxShadow: '0 0 20px currentColor', duration: 0.8, ease: "elastic.out(1, 0.5)" }
          )
          .fromTo(content, 
-            { y: 50, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 
-            "-=0.4"
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }, 
+            "-=0.6"
          )
          .fromTo(visual, 
-             { opacity: 0, scale: 0.9 },
+             { opacity: 0, scale: 0.95 },
              { opacity: 1, scale: 1, duration: 1, ease: "power2.out" },
              "-=0.6"
          );
 
-         // Parallax Effect for Visuals
-         // Moves the image slightly differently than the scroll to create depth
-         gsap.to(visual, {
-            yPercent: 30,
-            ease: "none",
-            scrollTrigger: {
-                trigger: node,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1
+         // Visual Container Parallax (Float)
+         gsap.fromTo(visual, 
+            { y: 50 },
+            {
+                y: -50,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: node,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: 1
+                }
             }
-         });
+         );
+
+         // Internal Image Parallax (Window Effect)
+         if (image) {
+             gsap.fromTo(image,
+                { scale: 1.1, yPercent: -5 },
+                {
+                    scale: 1.1,
+                    yPercent: 5,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: node,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1.2
+                    }
+                }
+             );
+         }
       });
     }
   }, []);
@@ -88,10 +135,10 @@ const Story: React.FC = () => {
   return (
     <section id="story" className="relative py-32 bg-black overflow-hidden border-t border-white/5">
         
-        {/* Ambient Background */}
-        <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-[10%] left-[20%] w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[100px]" />
-            <div className="absolute bottom-[10%] right-[20%] w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[100px]" />
+        {/* Ambient Background with Parallax Refs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div ref={bg1Ref} className="absolute top-[10%] left-[10%] w-[600px] h-[600px] bg-purple-900/10 rounded-full blur-[120px]" />
+            <div ref={bg2Ref} className="absolute bottom-[10%] right-[10%] w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[100px]" />
         </div>
 
         <div ref={containerRef} className="relative max-w-7xl mx-auto px-6">
@@ -111,7 +158,7 @@ const Story: React.FC = () => {
             </div>
 
             {/* CHAPTER NODES */}
-            <div className="flex flex-col gap-24 md:gap-32 relative z-10">
+            <div className="flex flex-col gap-32 relative z-10">
                 {STORY_CHAPTERS.map((chapter, index) => {
                     const isEven = index % 2 === 0;
                     
@@ -151,11 +198,11 @@ const Story: React.FC = () => {
                             
                             {/* VISUAL */}
                             <div className={`w-full md:w-5/12 pl-12 md:pl-0 story-visual ${isEven ? 'md:pl-16' : 'md:pr-16'}`}>
-                                <div className="relative group overflow-hidden rounded-xl border border-white/10 bg-[#050505] shadow-2xl aspect-video md:aspect-[4/3] transform transition-transform hover:scale-[1.02]">
+                                <div className="relative group overflow-hidden rounded-xl border border-white/10 bg-[#050505] shadow-2xl aspect-video md:aspect-[4/3]">
                                     <img 
                                         src={chapter.image} 
                                         alt={chapter.title} 
-                                        className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 grayscale group-hover:grayscale-0"
+                                        className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 grayscale group-hover:grayscale-0 will-change-transform"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
                                     <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-white/50" />

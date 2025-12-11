@@ -229,7 +229,7 @@ const Contact: React.FC = () => {
             "Let's connect if you need a developer who knows the difference between a <span className="text-[#FF3D00]">sous vide</span> and an <span className="text-[#00f3ff]">SVG</span>."
         </p>
         <p className="text-[10px] text-gray-800 uppercase tracking-widest">
-            © 2024 Muhammad Nurunnabi (Jewel). All Systems Operational.
+            © 2024 W3JDEV (aka JEWEL). All Systems Operational.
         </p>
       </div>
 
