@@ -215,7 +215,7 @@ const Contact: React.FC = () => {
 
               {submitStatus === 'success' && (
                 <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm text-center font-mono animate-pulse">
-                  > TRANSMISSION RECEIVED. STANDBY FOR REPLY.
+                  &gt; TRANSMISSION RECEIVED. STANDBY FOR REPLY.
                 </div>
               )}
 
