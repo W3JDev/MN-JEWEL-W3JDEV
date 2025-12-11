@@ -74,14 +74,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, project, mode }) => {
                          <p className="text-gray-400 max-w-md text-center mb-8 font-light">
                              You are connected to a simulated live environment of <span className="text-white font-bold">{project.title}</span>. 
                              In a production setting, this would iframe the deployed application.
-                         </p>
-                         <div className="p-4 bg-black rounded border border-white/10 font-mono text-xs text-green-400 w-full max-w-lg">
-                            <p>> Initializing viewport...</p>
-                            <p>> Loading assets... [OK]</p>
-                            <p>> Fetching API... {project.metric} improvement detected.</p>
-                            <p className="animate-pulse">> WAITING FOR USER INPUT_</p>
-                         </div>
-                    </div>
+                         </p{'>'}
+                         <div className="p-4 bg-black rounded border border-white/10 font-mono text-xs text-green-400 w-full max-w-lg"{'>'}
+                            <p{'>'}{'>'} Initializing viewport...</p{'>'}
+                            <p{'>'}{'>'} Loading assets... [OK]</p{'>'}
+                            <p{'>'}{'>'} Fetching API... {project.metric} improvement detected.</p{'>'}
+                            <p className="animate-pulse"{'>'}{'>'} WAITING FOR USER INPUT_</p{'>'}
+                         </div{'>'}
+                    </div{'>'}
                 )}
 
                 {/* --- CASE STUDY MODE (EDITORIAL STYLE) --- */}
