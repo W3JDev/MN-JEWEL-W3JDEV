@@ -171,7 +171,6 @@ const Story: React.FC = () => {
                             <div className={`w-full md:w-5/12 pl-12 md:pl-0 story-content ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
                                 <GlassCard 
                                     className={`p-8 rounded-2xl border-l-4 ${isEven ? 'md:border-l-0 md:border-r-4' : ''} group`} 
-                                    style={{ borderColor: getGlowColor(chapter.color) }}
                                     hoverEffect={true}
                                 >
                                     <div className={`font-mono text-xs text-gray-500 mb-4 flex items-center gap-2 ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
