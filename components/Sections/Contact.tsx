@@ -201,39 +201,39 @@ const Contact: React.FC = () => {
                   rows={4}
                   className={`bg-black/50 border ${errors.message ? 'border-red-500' : 'border-white/10'} rounded-lg p-4 text-white focus:outline-none focus:border-[#FF3D00] transition-colors resize-none placeholder:text-gray-600`}
                   placeholder="MISSION OBJECTIVES..."
-                />
-              </div>
+                /{'>'}
+              </div{'>'}
 
               <Button 
                 type="submit" 
                 variant="primary" 
                 className="w-full mt-2"
                 disabled={isSubmitting}
-              >
+              {'>'}
                 {isSubmitting ? 'ENCRYPTING & SENDING...' : 'INITIATE TRANSMISSION'}
-              </Button>
+              </Button{'>'}
 
               {submitStatus === 'success' && (
-                <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm text-center font-mono animate-pulse">
-                  > TRANSMISSION RECEIVED. STANDBY FOR REPLY.
-                </div>
+                <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm text-center font-mono animate-pulse"{'>'}
+                  {'>'} TRANSMISSION RECEIVED. STANDBY FOR REPLY.
+                </div{'>'}
               )}
 
-            </form>
-          </GlassCard>
-        </div>
-      </div>
+            </form{'>'}
+          </GlassCard{'>'}
+        </div{'>'}
+      </div{'>'}
       
-      <div className="text-center mt-20 font-mono">
-        <p className="text-gray-500 italic text-xs md:text-sm mb-4">
-            "Let's connect if you need a developer who knows the difference between a <span className="text-[#FF3D00]">sous vide</span> and an <span className="text-[#00f3ff]">SVG</span>."
-        </p>
-        <p className="text-[10px] text-gray-800 uppercase tracking-widest">
+      <div className="text-center mt-20 font-mono"{'>'}
+        <p className="text-gray-500 italic text-xs md:text-sm mb-4"{'>'}
+            "Let's connect if you need a developer who knows the difference between a <span className="text-[#FF3D00]"{'>'}sous vide</span{'>'} and an <span className="text-[#00f3ff]"{'>'}SVG</span{'>'}."
+        </p{'>'}
+        <p className="text-[10px] text-gray-800 uppercase tracking-widest"{'>'}
             © 2024 W3JDEV (aka JEWEL). All Systems Operational.
-        </p>
-      </div>
+        </p{'>'}
+      </div{'>'}
 
-      <style>{`
+      <style{'>'}{`
         .perspective-grid {
             perspective: 500px;
             transform-style: preserve-3d;
@@ -255,8 +255,8 @@ const Contact: React.FC = () => {
             0% { transform: rotateX(60deg) translateY(0); }
             100% { transform: rotateX(60deg) translateY(50px); }
         }
-      `}</style>
-    </footer>
+      `}</style{'>'}
+    </footer{'>'}
   );
 };
 
