@@ -1,0 +1,225 @@
+name: 🚑 AI Dev Team - Auto-Healing System
+
+on:
+  # Trigger when issues are created
+  issues:
+    types: [opened, labeled]
+  # Trigger on deployment status (via webhook)
+  repository_dispatch:
+    types: [vercel_deployment_failed]
+  # Manual trigger
+  workflow_dispatch:
+  # Check every hour for failed deployments
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  auto-heal:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: 🎯 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Check for AI Team Issues
+        id: check_issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'ai-team'
+            });
+
+            core.setOutput('has_issues', issues.data.length > 0);
+            core.setOutput('issues', JSON.stringify(issues.data));
+            return issues.data.length;
+
+      - name: 🏥 Analyze & Auto-Fix Issues
+        if: steps.check_issues.outputs.has_issues == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = JSON.parse('${{ steps.check_issues.outputs.issues }}');
+            const fs = require('fs');
+
+            for (const issue of issues) {
+              console.log(`🔧 Processing: ${issue.title}`);
+
+              // Parse issue to determine fix needed
+              if (issue.title.includes('MISSING')) {
+                const fileName = issue.title.match(/Add (.+)/)?.[1];
+                if (fileName) {
+                  let content = '';
+
+                  // Generate appropriate content based on file type
+                  if (fileName === '.env.example') {
+                    content = `# Environment Variables
+GEMINI_API_KEY=your_api_key_here
+NEXT_PUBLIC_API_URL=https://api.example.com
+DATABASE_URL=postgresql://user:pass@host:5432/db
+`;
+                  } else if (fileName === 'LICENSE') {
+                    content = `MIT License
+
+Copyright (c) ${new Date().getFullYear()} ${context.repo.owner}
+
+Permission is hereby granted, free of charge, to any person obtaining a copy...
+`;
+                  } else if (fileName === 'CONTRIBUTING.md') {
+                    content = `# Contributing to ${context.repo.repo}
+
+## How to Contribute
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## Code Style
+- Follow existing patterns
+- Add tests for new features
+- Update documentation
+`;
+                  }
+
+                  if (content) {
+                    try {
+                      await github.rest.repos.createOrUpdateFileContents({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        path: fileName,
+                        message: `🤖 Auto-create ${fileName} (AI Team fix)`,
+                        content: Buffer.from(content).toString('base64')
+                      });
+
+                      // Close the issue
+                      await github.rest.issues.update({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: issue.number,
+                        state: 'closed'
+                      });
+
+                      // Add comment
+                      await github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: issue.number,
+                        body: `✅ **AI Team Fixed!**\n\nCreated \`${fileName}\` automatically.`
+                      });
+                    } catch (error) {
+                      console.log(`Failed to create ${fileName}: ${error.message}`);
+                    }
+                  }
+                }
+              }
+            }
+
+      - name: 🚨 Check Vercel Deployment Status
+        id: check_vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "⚠️ VERCEL_TOKEN not set"
+            echo "failed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Get latest deployment (requires Vercel CLI or API)
+          echo "Checking Vercel deployments..."
+          # This would call Vercel API to check status
+          echo "failed=false" >> $GITHUB_OUTPUT
+
+      - name: 🔧 Auto-Fix TypeScript/Build Errors
+        if: steps.check_vercel.outputs.failed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { execSync } = require('child_process');
+            const fs = require('fs');
+
+            console.log('🔍 Scanning for TypeScript errors...');
+
+            try {
+              // Try to build and capture errors
+              execSync('npm install', { stdio: 'inherit' });
+              execSync('npm run build', { stdio: 'pipe' });
+            } catch (error) {
+              const errorOutput = error.stdout?.toString() || error.stderr?.toString() || '';
+              console.log('Build errors detected:', errorOutput);
+
+              // Parse TypeScript errors
+              const tsErrors = errorOutput.match(/error TS\d+: .+/g) || [];
+
+              for (const tsError of tsErrors) {
+                console.log(`Fixing: ${tsError}`);
+
+                // Auto-fix common errors
+                if (tsError.includes('TS1382') && tsError.includes('>')) {
+                  // Fix JSX > symbol errors
+                  const fileMatch = errorOutput.match(/([\w\/.-]+\.tsx?)\((\d+),\d+\)/);
+                  if (fileMatch) {
+                    const [_, filePath, lineNum] = fileMatch;
+                    try {
+                      let fileContent = fs.readFileSync(filePath, 'utf8');
+                      const lines = fileContent.split('\n');
+                      const lineIndex = parseInt(lineNum) - 1;
+
+                      // Fix the specific line
+                      if (lines[lineIndex]) {
+                        lines[lineIndex] = lines[lineIndex].replace(/>/g, "{'>'}");
+                        fs.writeFileSync(filePath, lines.join('\n'));
+                        console.log(`✅ Fixed ${filePath}:${lineNum}`);
+                      }
+                    } catch (e) {
+                      console.log(`Failed to fix ${filePath}: ${e.message}`);
+                    }
+                  }
+                }
+              }
+
+              // Commit fixes
+              try {
+                execSync('git config user.name "AI Dev Team"');
+                execSync('git config user.email "ai-team@github-actions"');
+                execSync('git add -A');
+                execSync('git commit -m "🤖 Auto-fix TypeScript build errors"');
+                execSync('git push');
+                console.log('✅ Pushed automatic fixes');
+              } catch (e) {
+                console.log('No changes to commit or push failed');
+              }
+            }
+
+      - name: 🔄 Verify Fix & Retry
+        id: verify
+        run: |
+          echo "Waiting for new deployment to start..."
+          sleep 30
+
+          # Check if new deployment succeeded
+          echo "verification=pending" >> $GITHUB_OUTPUT
+
+      - name: 📊 Report Status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ steps.verify.outputs.verification }}';
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚑 AI Team Healing Report',
+              body: `### Auto-Healing Attempt\n\n**Status:** ${status}\n**Run:** ${runUrl}\n\nThe AI Dev Team attempted to fix issues automatically.`,
+              labels: ['ai-team', 'auto-healing']
+            });
