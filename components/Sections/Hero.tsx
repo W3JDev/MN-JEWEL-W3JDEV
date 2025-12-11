@@ -225,7 +225,7 @@ const Hero: React.FC = () => {
                        
                        <p className="font-mono text-xs md:text-sm text-gray-300 leading-relaxed text-justify tracking-wide relative z-10">
                           <span className="text-[#FF3D00] font-bold">root@w3jdev:~#</span> <span className="text-white">init_sequence</span><br/><br/>
-                          <span className="text-[#FF3D00] font-bold">>></span> WE REJECT LATENCY. WE REJECT BLOAT. 
+                          <span className="text-[#FF3D00] font-bold">&gt;&gt;</span> WE REJECT LATENCY. WE REJECT BLOAT. 
                           I ARCHITECT DIGITAL SOLUTIONS WHERE <span className="text-black bg-[#e5e5e5] px-1 font-bold">MICHELIN-STAR SERVICE</span> MEETS <span className="text-black bg-[#00f3ff] px-1 font-bold">MACHINE LEARNING PRECISION</span>. 
                           TRANSFORMING CHAMPAGNE PROBLEMS INTO PROSECCO-BUDGET FIXES.
                           <span className="animate-pulse inline-block ml-2 w-2 h-4 bg-[#00f3ff] align-middle shadow-[0_0_10px_#00f3ff]"></span>
