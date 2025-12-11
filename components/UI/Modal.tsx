@@ -25,12 +25,19 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, project, mode }) => {
 
   if (!isOpen || !project) return null;
 
+  // Pre-calculate classes to avoid TSX parsing issues with complex template literals
+  const modalSizeClass = mode === 'case-study' ? 'max-w-5xl h-[90vh]' : 'max-w-4xl h-[70vh]';
+  const spinnerBorderClass = mode === 'demo' ? 'border-[#00f3ff]' : 'border-[#FF3D00]';
+  const spinnerTextClass = mode === 'demo' ? 'text-[#00f3ff]' : 'text-[#FF3D00]';
+  const loadingText = mode === 'demo' ? 'ESTABLISHING SECURE CONNECTION...' : 'DECRYPTING ARCHIVE...';
+  const headerText = mode === 'demo' ? `LIVE_ENV :: ${project.title}` : `ARCHIVE_LOG :: ${project.title}`;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease-out]">
       <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={onClose} />
       
       <GlassCard 
-        className={`w-full ${mode === 'case-study' ? 'max-w-5xl h-[90vh]' : 'max-w-4xl h-[70vh]'} relative rounded-2xl flex flex-col overflow-hidden bg-[#0a0a0a] border border-white/10 shadow-2xl transition-all duration-500`} 
+        className={`w-full ${modalSizeClass} relative rounded-2xl flex flex-col overflow-hidden bg-[#0a0a0a] border border-white/10 shadow-2xl transition-all duration-500`} 
         hoverEffect={false}
       >
         {/* Header */}
@@ -43,7 +50,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, project, mode }) => {
             </div>
             <div className="h-6 w-[1px] bg-white/10 mx-2"></div>
             <span className="font-mono text-xs md:text-sm text-gray-400">
-                {mode === 'demo' ? `LIVE_ENV :: ${project.title}` : `ARCHIVE_LOG :: ${project.title}`}
+                {headerText}
             </span>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/5">
@@ -56,9 +63,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, project, mode }) => {
           
           {loading ? (
              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#050505]">
-                <div className={`w-12 h-12 border-4 ${mode === 'demo' ? 'border-[#00f3ff]' : 'border-[#FF3D00]'} border-t-transparent rounded-full animate-spin mx-auto mb-4`} />
-                <p className={`font-mono text-xs ${mode === 'demo' ? 'text-[#00f3ff]' : 'text-[#FF3D00]'} animate-pulse`}>
-                    {mode === 'demo' ? 'ESTABLISHING SECURE CONNECTION...' : 'DECRYPTING ARCHIVE...'}
+                <div className={`w-12 h-12 border-4 ${spinnerBorderClass} border-t-transparent rounded-full animate-spin mx-auto mb-4`} />
+                <p className={`font-mono text-xs ${spinnerTextClass} animate-pulse`}>
+                    {loadingText}
                 </p>
              </div>
           ) : (
@@ -74,14 +81,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, project, mode }) => {
                          <p className="text-gray-400 max-w-md text-center mb-8 font-light">
                              You are connected to a simulated live environment of <span className="text-white font-bold">{project.title}</span>. 
                              In a production setting, this would iframe the deployed application.
-                         </p{'>'}
-                         <div className="p-4 bg-black rounded border border-white/10 font-mono text-xs text-green-400 w-full max-w-lg"{'>'}
-                            <p{'>'}{'>'} Initializing viewport...</p{'>'}
-                            <p{'>'}{'>'} Loading assets... [OK]</p{'>'}
-                            <p{'>'}{'>'} Fetching API... {project.metric} improvement detected.</p{'>'}
-                            <p className="animate-pulse"{'>'}{'>'} WAITING FOR USER INPUT_</p{'>'}
-                         </div{'>'}
-                    </div{'>'}
+                         </p>
+                         <div className="p-4 bg-black rounded border border-white/10 font-mono text-xs text-green-400 w-full max-w-lg">
+                            <p>{'>'} Initializing viewport...</p>
+                            <p>{'>'} Loading assets... [OK]</p>
+                            <p>{'>'} Fetching API... {project.metric} improvement detected.</p>
+                            <p className="animate-pulse">{'>'} WAITING FOR USER INPUT_</p>
+                         </div>
+                    </div>
                 )}
 
                 {/* --- CASE STUDY MODE (EDITORIAL STYLE) --- */}

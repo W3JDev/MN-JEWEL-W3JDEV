@@ -219,79 +219,79 @@ const Hero: React.FC = () => {
                    </div>
 
                    {/* Terminal Body */}
-                   <div className="p-6 md:p-8 relative"{'>'}
+                   <div className="p-6 md:p-8 relative">
                        {/* Background Striping */}
-                       <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent_0px,transparent_1px,rgba(255,255,255,0.02)_2px,rgba(255,255,255,0.02)_3px)] pointer-events-none opacity-20"{'>'}</div{'>'}
+                       <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent_0px,transparent_1px,rgba(255,255,255,0.02)_2px,rgba(255,255,255,0.02)_3px)] pointer-events-none opacity-20"></div>
                        
-                       <p className="font-mono text-xs md:text-sm text-gray-300 leading-relaxed text-justify tracking-wide relative z-10"{'>'}
-                          <span className="text-[#FF3D00] font-bold"{'>'}root@w3jdev:~#</span{'>'} <span className="text-white"{'>'}init_sequence</span{'>'}<br/{'>'}<br/{'>'}
-                          <span className="text-[#FF3D00] font-bold"{'>'}{'>'}{'>'}</span{'>'} WE REJECT LATENCY. WE REJECT BLOAT. 
-                          I ARCHITECT DIGITAL SOLUTIONS WHERE <span className="text-black bg-[#e5e5e5] px-1 font-bold"{'>'}MICHELIN-STAR SERVICE</span{'>'} MEETS <span className="text-black bg-[#00f3ff] px-1 font-bold"{'>'}MACHINE LEARNING PRECISION</span{'>'}. 
+                       <p className="font-mono text-xs md:text-sm text-gray-300 leading-relaxed text-justify tracking-wide relative z-10">
+                          <span className="text-[#FF3D00] font-bold">root@w3jdev:~#</span> <span className="text-white">init_sequence</span><br/><br/>
+                          <span className="text-[#FF3D00] font-bold">>></span> WE REJECT LATENCY. WE REJECT BLOAT. 
+                          I ARCHITECT DIGITAL SOLUTIONS WHERE <span className="text-black bg-[#e5e5e5] px-1 font-bold">MICHELIN-STAR SERVICE</span> MEETS <span className="text-black bg-[#00f3ff] px-1 font-bold">MACHINE LEARNING PRECISION</span>. 
                           TRANSFORMING CHAMPAGNE PROBLEMS INTO PROSECCO-BUDGET FIXES.
-                          <span className="animate-pulse inline-block ml-2 w-2 h-4 bg-[#00f3ff] align-middle shadow-[0_0_10px_#00f3ff]"{'>'}</span{'>'}
-                       </p{'>'}
-                   </div{'>'}
-               </div{'>'}
-            </div{'>'}
+                          <span className="animate-pulse inline-block ml-2 w-2 h-4 bg-[#00f3ff] align-middle shadow-[0_0_10px_#00f3ff]"></span>
+                       </p>
+                   </div>
+               </div>
+            </div>
             
             {/* --- CONTROL DECK (BUTTONS) --- */}
-            <div ref={buttonsRef} className="flex flex-col items-center gap-6 opacity-0 z-20 w-full"{'>'}
+            <div ref={buttonsRef} className="flex flex-col items-center gap-6 opacity-0 z-20 w-full">
                 {/* Visual Connector Line */}
-                <div className="h-8 w-[1px] bg-gradient-to-b from-white/10 to-transparent"{'>'}</div{'>'}
+                <div className="h-8 w-[1px] bg-gradient-to-b from-white/10 to-transparent"></div>
                 
-                <div className="flex flex-col md:flex-row gap-6 w-full justify-center"{'>'}
+                <div className="flex flex-col md:flex-row gap-6 w-full justify-center">
                     <Button 
                         variant="primary" 
-                        onClick={() ={'>'} scrollTo('projects')} 
+                        onClick={() => scrollTo('projects')} 
                         icon="bolt" 
                         className="w-full md:w-auto min-w-[200px]"
-                    {'>'}
+                    >
                         View ROI Impact
-                    </Button{'>'}
+                    </Button>
                     
                     <Button 
                         variant="glass" 
-                        onClick={() ={'>'} scrollTo('contact')} 
+                        onClick={() => scrollTo('contact')} 
                         icon="terminal" 
                         className="w-full md:w-auto min-w-[200px]"
-                    {'>'}
+                    >
                         Initiate Protocol
-                    </Button{'>'}
-                </div{'>'}
-            </div{'>'}
+                    </Button>
+                </div>
+            </div>
 
-          </div{'>'}
+          </div>
 
           {/* Ticker - Adjusted for distinct separation */}
-          <div className="relative w-full bg-[#050505] border-t border-white/10 py-6 md:py-8 overflow-hidden z-20 mt-auto shadow-2xl"{'>'}
-            <div className="flex animate-[ticker_30s_linear_infinite] w-max hover:[animation-play-state:paused]"{'>'}
-              {[1, 2, 3].map((i) ={'>'} (
-                <div key={i} className="flex gap-16 md:gap-32 mx-8 md:mx-16 font-mono items-center tracking-widest"{'>'}
-                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4"{'>'}
-                      <span className="text-[#00f3ff] font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(0,243,255,0.3)]"{'>'}95%</span{'>'} 
-                      <span className="text-xs md:text-sm text-gray-400"{'>'}TIME SAVED</span{'>'}
-                  </span{'>'}
-                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4"{'>'}
-                      <span className="text-[#FF3D00] font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(255,61,0,0.3)]"{'>'}300%</span{'>'} 
-                      <span className="text-xs md:text-sm text-gray-400"{'>'}ROI (SALES)</span{'>'}
-                  </span{'>'}
-                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4"{'>'}
-                      <span className="text-[#7e22ce] font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(126,34,206,0.3)]"{'>'}40%</span{'>'} 
-                      <span className="text-xs md:text-sm text-gray-400"{'>'}FASTER ONBOARDING</span{'>'}
-                  </span{'>'}
-                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4"{'>'}
-                      <span className="text-white font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"{'>'}10k+</span{'>'} 
-                      <span className="text-xs md:text-sm text-gray-400"{'>'}HOURS OPS</span{'>'}
-                  </span{'>'}
-                </div{'>'}
+          <div className="relative w-full bg-[#050505] border-t border-white/10 py-6 md:py-8 overflow-hidden z-20 mt-auto shadow-2xl">
+            <div className="flex animate-[ticker_30s_linear_infinite] w-max hover:[animation-play-state:paused]">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex gap-16 md:gap-32 mx-8 md:mx-16 font-mono items-center tracking-widest">
+                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                      <span className="text-[#00f3ff] font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(0,243,255,0.3)]">95%</span> 
+                      <span className="text-xs md:text-sm text-gray-400">TIME SAVED</span>
+                  </span>
+                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                      <span className="text-[#FF3D00] font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(255,61,0,0.3)]">300%</span> 
+                      <span className="text-xs md:text-sm text-gray-400">ROI (SALES)</span>
+                  </span>
+                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                      <span className="text-[#7e22ce] font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(126,34,206,0.3)]">40%</span> 
+                      <span className="text-xs md:text-sm text-gray-400">FASTER ONBOARDING</span>
+                  </span>
+                  <span className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                      <span className="text-white font-bold text-3xl md:text-5xl drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">10k+</span> 
+                      <span className="text-xs md:text-sm text-gray-400">HOURS OPS</span>
+                  </span>
+                </div>
               ))}
-            </div{'>'}
-          </div{'>'}
+            </div>
+          </div>
 
-        </div{'>'}
-      </div{'>'}
+        </div>
+      </div>
       
-      <style{'>'}{`
+      <style>{`
         .stroke-text {
             -webkit-text-stroke: 1px rgba(255,255,255,0.3);
             color: transparent;
@@ -309,8 +309,8 @@ const Hero: React.FC = () => {
             0% { background-position: 0% 0%; }
             100% { background-position: 0% 100%; }
         }
-      `}</style{'>'}
-    </section{'>'}
+      `}</style>
+    </section>
   );
 };
 
