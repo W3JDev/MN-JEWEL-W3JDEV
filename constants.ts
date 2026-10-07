@@ -308,11 +308,8 @@ export const TESTIMONIALS = [
 ];
 
 export const CLIENTS = [
-  { name: 'CMA CGM', logo: 'https://placehold.co/180x60/050505/00f3ff/png?text=CMA+CGM' },
-  { name: 'Neurones IT', logo: 'https://placehold.co/180x60/050505/00f3ff/png?text=NEURONES+IT' },
-  { name: 'Muze Cafe', logo: 'https://placehold.co/180x60/050505/FF3D00/png?text=MUZE+CAFE' },
   { name: 'W3J LLC', logo: 'https://placehold.co/180x60/050505/7e22ce/png?text=W3J+LLC' },
-  { name: 'Flair Network', logo: 'https://placehold.co/180x60/050505/FF3D00/png?text=FLAIR+200%2B' },
+  { name: 'Fortune Global 500 logistics (NDA)', logo: 'https://placehold.co/180x60/050505/00f3ff/png?text=FORTUNE+GLOBAL+500' },
   { name: 'Bijou AI', logo: 'https://placehold.co/180x60/050505/00f3ff/png?text=BIJOU+AI' }
 ];
 
