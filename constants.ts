@@ -206,25 +206,6 @@ export const PROJECTS: Project[] = [
     repoLink: 'https://github.com/W3JDev/FlairAi'
   },
   {
-    id: 'vine-ai',
-    title: 'VINE AI',
-    metric: '300%',
-    metricLabel: 'ROI',
-    metricColor: 'purple',
-    description: 'AI wine sommelier serving 50 restaurants. 300% ROI, +35% average ticket size via semantic wine pairing recommendations. Python + OpenAI + LangChain vector search. Production consulting revenue.',
-    tags: ['Python', 'LangChain', 'OpenAI', 'Vector DB'],
-    image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1200',
-    liveLink: '#',
-    caseStudyContent: {
-      challenge: "Waitstaff lack deep oenological knowledge to confidently sell premium wines, resulting in missed revenue and dependency on a single sommelier.",
-      solution: "Vector Search recommendation engine — staff input guest preferences, system retrieves perfect bottle with tasting notes and upsell scripts from full inventory.",
-      results: ["300% ROI within 3 months", "+35% Average Order Value for wine", "Zero dependency on head sommelier for floor recommendations", "Deployed across 50 restaurants"],
-      techDeepDive: "Vector DB for semantic search. Python + LangChain for query parsing. OpenAI embeddings on full wine inventory."
-    },
-    repoLink: '#',
-    caseStudyLink: '#'
-  },
-  {
     id: 'gitlaunch-ai',
     title: 'GITLAUNCH AI',
     metric: '60s',
@@ -299,11 +280,6 @@ export const TESTIMONIALS = [
     name: "HR Automation",
     role: "15,000+ Daily Users",
     quote: "PUNCHCLOCK reduced payroll processing from 40 hours to 2 hours per month with 97% biometric accuracy. LHDN 2025 compliant. Live in production.",
-  },
-  {
-    name: "Revenue Generation",
-    role: "300% ROI Delivered",
-    quote: "VineAI boosted premium wine sales by 35% average order value across 50 restaurants. 300% return on investment within 3 months of deployment.",
   }
 ];
 
